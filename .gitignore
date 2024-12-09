@@ -1,0 +1,11 @@
+.classpath
+.project
+.settings/
+.loadpath
+.recommenders
+*.tmp
+*.bak
+*.swp
+*~.nib
+tmp/
+
