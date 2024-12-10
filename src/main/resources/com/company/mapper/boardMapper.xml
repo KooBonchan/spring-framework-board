@@ -34,7 +34,7 @@
   
   <!-- CREATE, UPDATE, DELETE -->
   <insert id="write" parameterType="Board">
-    <selectKey keyProperty="idx" resultType="long" order="BEFORE">
+    <selectKey keyProperty="idx"  resultType="long" order="BEFORE" >
       SELECT seq_board.nextval FROM dual
     </selectKey>
     INSERT INTO board (idx, title, content, writer)

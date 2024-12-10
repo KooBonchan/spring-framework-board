@@ -1,10 +1,54 @@
 package com.company.controller.api;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
 
-@Controller
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.company.domain.ReplyDTO;
+import com.company.service.ReplyService;
+
+@RestController
 @RequestMapping("api/board")
 public class BoardApiController {
+	@Autowired
+	private ReplyService replyService;
+	
+	@GetMapping(path = "{boardIdx}")
+	public ResponseEntity<List<ReplyDTO>> findAll(
+		@PathVariable long boardIdx){
+		var replies = replyService.findAll(boardIdx);
+		if(replies != null) {
+			return ResponseEntity.ok(replies);
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
+	
+	@PostMapping(path = "{boardIdx}")
+	public ResponseEntity<Void> write(@PathVariable long boardIdx,ReplyDTO replyDTO) {
+		replyDTO.setBoardIdx(boardIdx);
+		if(replyService.write(replyDTO)) {
+			return ResponseEntity.ok(null);
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
+	
+
+	@DeleteMapping(path = "{boardIdx}/{idx}")
+	public ResponseEntity<Void> delete(
+			@PathVariable(name = "boardIdx") long boardIdx,
+			@PathVariable(name = "idx") long idx) {
+		if(replyService.delete(boardIdx, idx)) {
+			return ResponseEntity.ok(null);
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
 	
 }

@@ -1,5 +1,6 @@
-create sequence seq_board;
+drop sequence seq_reply;
 drop sequence seq_board;
+drop table reply;
 drop table board;
 create table board(
   idx number(10, 0) not null,
@@ -23,7 +24,34 @@ values (seq_board.nextval, 'Nap That Chap!','Bass: Sutoh Mitsuru','T-Square');
 insert into board (idx, title, content, writer)
 select seq_board.nextval, title, content, writer from board;
 
-commit;
 
 create index idx_board_title on board(lower(title));
 create index idx_board_writer on board(lower(writer));
+
+
+create table reply (
+  idx number(10,0) not null,
+  writer  varchar(50) not null,
+  content varchar(250) not null,
+  regdate date default sysdate,
+  boardIdx number(10,0) not null,
+  constraint fk_comment_board foreign key (boardIdx)
+    REFERENCES board(idx) on delete cascade
+);
+
+create sequence seq_reply;
+
+insert into reply (idx, writer, content, boardIdx)
+values (seq_reply.nextval, 'Vincen Garcia', 'I''ve been inspired', 1);
+
+
+commit;
+
+
+
+
+
+
+
+
+

@@ -37,11 +37,12 @@ public class BoardController {
 	@GetMapping("")
 	public String home(Model model,
 		@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+		@RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
 		@RequestParam(name = "category", required = false) String category,
 	    @RequestParam(name = "query", required = false) String query
 	) {
-		PageDTO pageDTO = boardService.getPageInfo(page, category, query);
-		var boards = boardService.findPage(pageDTO.getPage(), category, query);
+		PageDTO pageDTO = boardService.getPageInfo(page, pageSize, category, query);
+		var boards = boardService.getPage(pageDTO.getPage(), pageSize, category, query);
 		model.addAttribute("boards", boards);
 		model.addAttribute("pageInfo", pageDTO);
 		return "board/list";
@@ -49,7 +50,7 @@ public class BoardController {
 	
 	@GetMapping(path = "", params = "idx")
 	public String view(Model model, @RequestParam long idx) {
-		BoardDTO boardDTO = boardService.findByIdx(idx);
+		BoardDTO boardDTO = boardService.get(idx);
 		if(boardDTO != null) {
 			model.addAttribute("board", boardDTO);
 			return "board/view";
@@ -62,7 +63,7 @@ public class BoardController {
 	@PostMapping({"", "write"})
 	public String write(BoardDTO boardDTO) {
 		String message = "failed to write new document";
-		if(boardService.write(boardDTO)) {
+		if(boardService.register(boardDTO)) {
 			message= "Successfully uploaded your document"; 
 		}
 		return toHomeWithMessage(message);
@@ -70,7 +71,7 @@ public class BoardController {
 	
 	@GetMapping("update")
 	public String updateForm(Model model, @RequestParam("idx") long idx) {
-		BoardDTO boardDTO = boardService.findByIdx(idx);
+		BoardDTO boardDTO = boardService.get(idx);
 		if(boardDTO != null) {
 			model.addAttribute("board", boardDTO);
 			return "board/update";
@@ -81,7 +82,7 @@ public class BoardController {
 	@PostMapping("update")
 	public String update(BoardDTO boardDTO) {
 		String message = "failed to update document";
-		if(boardService.update(boardDTO)) {
+		if(boardService.modify(boardDTO)) {
 			message= "successfully updated the document."; 
 		}
 		return toHomeWithMessage(message);
@@ -91,7 +92,7 @@ public class BoardController {
 	@GetMapping("delete")
 	public String delete(@RequestParam("idx") long idx) {
 		String message = "failed to delete document";
-		if(boardService.delete(idx)) {
+		if(boardService.remove(idx)) {
 			message= "successfully deleted the document."; 
 		}
 		return toHomeWithMessage(message);

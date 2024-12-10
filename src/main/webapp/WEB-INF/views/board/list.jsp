@@ -11,8 +11,27 @@
 <body>
 <header>
 <h2>LOGO</h2>
+<c:url var="queryUrl" value="/board">
+	<c:param name="category" value="${param.category}" />
+    <c:param name="query" value="${param.query}" />
+</c:url>
 <div>
-	<form name="form-search">
+	<form action="${queryUrl}" name="form-page-size">
+	<label for="pageSize">Page Size:</label>
+	<select name="pageSize" onchange="document['form-page-size'].submit();">
+		<option value="10" label="10" ${param.pageSize == "10" ? 'selected' : ''}>
+		<option value="20" label="20" ${param.pageSize == "20" ? 'selected' : ''}>
+		<option value="50" label="50" ${param.pageSize == "50" ? 'selected' : ''}>
+		<option value="100" label="100" ${param.pageSize == "100" ? 'selected' : ''}>
+	</select>
+	</form>
+</div>
+
+<c:url var="pageSizeUrl" value="/board">
+	<c:param name="pageSize" value="${param.pageSize}" />
+</c:url>
+<div>
+	<form action="${pageSizeUrl }" name="form-search">
 	<select name="category">
 		<option value="title" label="Title">
 		<option value="writer" label="Writer" ${param.category == "writer" ? 'selected' : ''}>
@@ -47,9 +66,8 @@
 </table>
 <footer>
 <div>
-<c:url var="queryUrl" value="/board">
-	<c:param name="category" value="${param.category}" />
-    <c:param name="query" value="${param.query}" />
+<c:url var="pagingUrl" value="${queryUrl }">
+	<c:param name="pageSize" value="${param.pageSize}" />
 </c:url>
 <c:choose>
     <c:when test="${pageInfo.startPage == 1}">
@@ -57,8 +75,8 @@
         <span class="">PREV</span>
     </c:when>
     <c:otherwise>
-        <a href="${queryUrl}">Start</a>
-        <a href="${queryUrl}&page=${pageInfo.startPage - 1}">PREV</a>
+        <a href="${pagingUrl}">Start</a>
+        <a href="${pagingUrl}&page=${pageInfo.startPage - 1}">PREV</a>
     </c:otherwise>
 </c:choose>
 <span>
@@ -68,7 +86,7 @@
 	        <span class="disabled">${page}</span>
 	    </c:when>
 	    <c:otherwise>
-	    	<a href="${queryUrl}&page=${page}">${page}</a>
+	    	<a href="${pagingUrl}&page=${page}">${page}</a>
 	    </c:otherwise>
 	</c:choose>
 	</c:forEach>
@@ -80,8 +98,8 @@
         <span class="disabled">End</span>
     </c:when>
     <c:otherwise>
-        <a href="${queryUrl}&page=${pageInfo.endPage + 1}">NEXT</a>
-        <a href="${queryUrl}&page=${pageInfo.maxPage}">End</a>
+        <a href="${pagingUrl}&page=${pageInfo.endPage + 1}">NEXT</a>
+        <a href="${pagingUrl}&page=${pageInfo.maxPage}">End</a>
     </c:otherwise>
 </c:choose>
 

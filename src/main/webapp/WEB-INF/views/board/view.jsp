@@ -42,26 +42,63 @@ html, body{
 </head>
 <body>
 <header>
-<h2 style="width:fit-content;margin:0"><a href="/board">LOGO</a></h2>
+	<h2 style="width:fit-content;margin:0"><a href="/board">LOGO</a></h2>
 </header>
 <section>
-<div class="title">${board.title }</div>
-<div class="metadata">
-	<span>Writer: ${board.writer}</span>
-	<span>Registered : <fmt:formatDate value="${board.regDate}" pattern="yy.MM.dd."/></span>
-	<c:if test="${board.updateDate != board.regDate }">
-	<span>Updated: <fmt:formatDate value="${board.regDate}" pattern="yy.MM.dd."/></span>
-	</c:if>
-</div>
-<p class="content">
-${board.content}
-</p>
+	<div class="title">${board.title }</div>
+	<div class="metadata">
+		<span>Writer: ${board.writer}</span>
+		<span>Registered : <fmt:formatDate value="${board.regDate}" pattern="yy.MM.dd."/></span>
+		<c:if test="${board.updateDate != board.regDate }">
+		<span>Updated: <fmt:formatDate value="${board.regDate}" pattern="yy.MM.dd."/></span>
+		</c:if>
+	</div>
+	<p class="content">
+	${board.content}
+	</p>
 </section>
+
+<section>
+	<form name="form-reply" onsubmit="submitReply(${board.idx});return false;">
+		<input name="writer">
+		<textarea name="content">
+		</textarea>
+		<input type="submit"> 
+	</form>
+	<div id="reply-header">
+		<span onclick="loadReplies(${board.idx})">&#x21bb;</span>
+	</div>
+	<div id="reply-container">
+		
+	</div>
+</section>
+
 <footer>
-<div class="btn-bar">
-<button type="button" onclick="location.href='/board/update?idx=${board.idx}'">Update</button>
-<button type="button" onclick="location.href='/board/delete?idx=${board.idx}'">Delete</button>
-</div>
+	<div class="btn-bar">
+	<button type="button" onclick="location.href='/board/update?idx=${board.idx}'">Update</button>
+	<button type="button" onclick="location.href='/board/delete?idx=${board.idx}'">Delete</button>
+	</div>
 </footer>
 </body>
+
+<script>
+window.onload = () => {
+	loadReplies(${board.idx});
+}
+
+const replyContainer = document.getElementById("reply-container");
+function loadReplies(idx){
+	fetch("/api/board/" + idx)
+	.then(response => response.json())
+	.then(jsons => {
+		replyContainer.innerHTML = "";
+		for(let json of jsons){
+			
+		}
+	});
+}
+function submitReply(idx){
+	fetch()	
+}
+</script>
 </html>
