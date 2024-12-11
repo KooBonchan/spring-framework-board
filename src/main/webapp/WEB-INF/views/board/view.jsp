@@ -12,6 +12,7 @@
 *{
 	margin: 0 auto;
 	padding: 0;
+	box-sizing: border-box;
 }
 a {
 	text-decoration: none;
@@ -37,6 +38,46 @@ html, body{
 .content{
 	margin-top:10px;
 }
+.delete{
+	font-size: 15px;
+	color: #f66;
+}
+
+#reply-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+#reply-container .writer{
+	width: 100px;
+	font-weight: bold;
+}
+#reply-container .content{
+	width: 400px;
+}
+#reply-container td {
+  padding: 10px;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 1.6;
+}
+button.delete {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button.delete:hover {
+  background-color: #c82333;
+}
+
 </style>
 
 </head>
@@ -59,18 +100,17 @@ html, body{
 </section>
 
 <section>
-	<form name="form-reply" onsubmit="submitReply(${board.idx});return false;">
+	<form name="form-reply" onsubmit="return false;">
 		<input name="writer">
-		<textarea name="content">
-		</textarea>
-		<input type="submit"> 
+		<textarea name="content"></textarea>
+		<button type="button" onclick="submitReply(${board.idx})">Reply</button> 
 	</form>
 	<div id="reply-header">
 		<span onclick="loadReplies(${board.idx})">&#x21bb;</span>
 	</div>
-	<div id="reply-container">
-		
-	</div>
+	<table id="reply-container">
+		<!-- Table content will be dynamically populated here -->
+	</table>
 </section>
 
 <footer>
@@ -87,18 +127,53 @@ window.onload = () => {
 }
 
 const replyContainer = document.getElementById("reply-container");
+const formReply = document['form-reply'];
 function loadReplies(idx){
 	fetch("/api/board/" + idx)
 	.then(response => response.json())
 	.then(jsons => {
-		replyContainer.innerHTML = "";
-		for(let json of jsons){
-			
+		let inner = "";
+		if(jsons.length == 0){
+			inner = "<tr><td colspan=3>No Replies Yet</td></tr>"
 		}
+		else {
+			for(let json of jsons){
+				inner = inner +
+					"<tr><td class='writer'>" +json['writer'] + "</td>" +
+					"<td class='content'>" +json['content'] + "</td>" +
+					"<td><button type='button' class='delete' onclick='deleteReply("+idx+','+json['idx']+")'>X</button></td>" +
+					"</tr>";
+			}	
+		}
+		
+		replyContainer.innerHTML = inner;
 	});
 }
 function submitReply(idx){
-	fetch()	
+	const data = {
+		writer: formReply.writer.value,
+		content: formReply.content.value,
+	}
+	fetch("/api/board/" + idx, {
+		method: "POST",
+		headers: {
+	    	'Content-Type': 'application/json',
+	  	},
+	  	body: JSON.stringify(data),
+	})
+	.then(response => {
+		loadReplies(idx);
+	})
+	.catch(console.log)
+}
+function deleteReply(boardIdx, idx){
+	fetch("/api/board/" + boardIdx + "/" + idx, {
+		method: "DELETE"
+	})
+	.then(response => {
+		loadReplies(boardIdx);
+	})
+	.catch(console.log)
 }
 </script>
 </html>

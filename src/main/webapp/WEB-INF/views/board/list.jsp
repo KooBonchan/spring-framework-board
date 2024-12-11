@@ -3,119 +3,148 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Board List</title>
-</head>
+<%@include file="../includes/header.jsp" %>
 <body>
-<header>
-<h2>LOGO</h2>
-<c:url var="queryUrl" value="/board">
-	<c:param name="category" value="${param.category}" />
-    <c:param name="query" value="${param.query}" />
-</c:url>
-<div>
-	<form action="${queryUrl}" name="form-page-size">
-	<label for="pageSize">Page Size:</label>
-	<select name="pageSize" onchange="document['form-page-size'].submit();">
-		<option value="10" label="10" ${param.pageSize == "10" ? 'selected' : ''}>
-		<option value="20" label="20" ${param.pageSize == "20" ? 'selected' : ''}>
-		<option value="50" label="50" ${param.pageSize == "50" ? 'selected' : ''}>
-		<option value="100" label="100" ${param.pageSize == "100" ? 'selected' : ''}>
-	</select>
-	</form>
-</div>
+<div class="wrapper">
+	<%@include file="../includes/navbar.jsp" %>
+	<div id="page-wrapper">
+		<!-- PAGE-HEADER -->
+		<div class="row"><div class="col-lg-12">
+	    	<h2 class="page-header">LOGO</h2>
+	    </div></div>
+	    
+	    <!-- PAGE-BODY -->
+		<div class="row"><div class="col-lg-12"><div class="panel panel-default">
+            <div class="panel-body">
+            	<!-- PAGE SIZING -->
+            	<c:url var="queryUrl" value="/board">
+					<c:param name="category" value="${param.category}" />
+				    <c:param name="query" value="${param.query}" />
+				</c:url>
+            	<div class="d-flex flex-row justify-content-between mb-3">
+	            	<form class="form-inline justify-content" role="form" action="${queryUrl}" name="form-page-size">
+						<div class="form-group">
+							<label for="pageSize" class="mr-3">Page Size:</label>
+							<div class="input-group">
+							<select class="form-control" name="pageSize" onchange="document['form-page-size'].submit();">
+								<option value="10" label="10" ${param.pageSize == "10" ? 'selected' : ''}>
+								<option value="20" label="20" ${param.pageSize == "20" ? 'selected' : ''}>
+								<option value="50" label="50" ${param.pageSize == "50" ? 'selected' : ''}>
+								<option value="100" label="100" ${param.pageSize == "100" ? 'selected' : ''}>
+							</select>
+							</div>
+						</div>
+					</form>
+					<button class="btn btn-primary" type="button" onclick="location.href='/board/write'">Write new document</button>
+				<!-- BUTTONS-->
+				
+				</div>
+				
+				<!-- SEARCH QUERY -->
+				<div class="mb-3">
+					<c:url var="pageSizeUrl" value="/board">
+						<c:param name="pageSize" value="${param.pageSize}" />
+					</c:url>
+					<form role="form" class="form-inline" action="${pageSizeUrl }" name="form-search">
+						<div class="form-group">
+							<select class="form-control" name="category">
+								<option value="title" label="Title">
+								<option value="writer" label="Writer" ${param.category == "writer" ? 'selected' : ''}>
+								<option value="content" label="Content" ${param.category == "content" ? 'selected' : ''}>
+							</select>
+						</div>
+						<div class="form-group mr-3"  style="flex-grow: 1;" >
+							<input style="width:100%;" class="form-control" name="query" value='${param.query}'>
+						</div>
+						
+						<div class="form-group">
+							<button class="btn btn-default" type="submit" value="submit">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-default" type="button" onclick='location.href="/board"'>RESET</button>
+						</div>
+					</form>
+				</div>
+				<!-- TABLE -->
+            	<table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+							<th>Title</th>
+							<th>Writer</th>
+							<th>Reg Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="board" items="${boards}">
+						<tr onclick="location.href='/board?idx=${board.idx}'">
+							<td>${board.idx}</td>
+							<td>${board.title}</td>
+							<td>${board.writer}</td>
+							<td>${board.regDate}</td>
+						</tr>
+						</c:forEach>
+                    </tbody>
+                </table>
+                
+                <!-- table pagination -->
+                <c:url var="pagingUrl" value="${queryUrl }">
+					<c:param name="pageSize" value="${param.pageSize}" />
+				</c:url>
+				<div class='float-right'>
+					<ul class='pagination'>
+						<c:choose>
+						<c:when test="${pageInfo.startPage == 1}">
+							<li class="page-item disabled">
+							<a class="page-link" href="javascript:void(0);" tabindex="-1">PREV</a>
+							</li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item">
+							<a class="page-link" href="${pagingUrl}&page=${pageInfo.startPage - 1}">PREV</a>
+							</li>
+						</c:otherwise>
+						</c:choose>
+						
+						<c:forEach var="page" begin="${pageInfo.startPage}" end="${pageInfo.endPage }">
+					    	<li class="page-item ${pageInfo.page == page ? 'active' : '' }">
+					    		<a class="page-link" href="${pagingUrl}&page=${page}">${page}</a>
+				    		</li>
+					    </c:forEach>
+					    
+					    <c:choose>
+						<c:when test="${pageInfo.endPage == pageInfo.maxPage}">
+							<li class="page-item disabled">
+							<a class="page-link" href="javascript:void(0);" tabindex="-1">NEXT</a>
+							</li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item">
+					    	<a class="page-link" href="${pagingUrl}&page=${pageInfo.endPage + 1}">NEXT</a>
+					    	</li>
+						</c:otherwise>
+						</c:choose>
+					</ul>
+				</div><!-- pagination end -->
+            </div><!-- END PANEL-BODY -->
+        </div></div></div><!-- END PAGE -->
+	</div><!-- /.page-wrapper -->
+</div><!-- /.wrapper -->
 
-<c:url var="pageSizeUrl" value="/board">
-	<c:param name="pageSize" value="${param.pageSize}" />
-</c:url>
-<div>
-	<form action="${pageSizeUrl }" name="form-search">
-	<select name="category">
-		<option value="title" label="Title">
-		<option value="writer" label="Writer" ${param.category == "writer" ? 'selected' : ''}>
-		<option value="content" label="Content" ${param.category == "content" ? 'selected' : ''}>
-	</select>
-	<input name="query" value='${param.query}'>
-	<input type="submit" value="submit">
-	</form>
-	<button type="button" onclick='location.href="/board"'>reset</button>
-</div>
-</header>
-<table>
-	<tr>
-		<th>Index</th>
-		<th>Title</th>
-		<th>Writer</th>
-		<th>Reg Date</th>
-	</tr>
-	<c:if test="${empty boards}">
-	<tr><td class="no-content" colspan=4>No Contents</td></tr>
-	</c:if>
-	<c:forEach var="board" items="${boards}">
-	<tr>
-		<td>${board.idx}</td>
-		
-		<td><a href="/board?idx=${board.idx}">${board.title}</a></td>
-		
-		<td>${board.writer}</td>
-		<td>${board.regDate}</td>
-	</tr>
-	</c:forEach>
-</table>
-<footer>
-<div>
-<c:url var="pagingUrl" value="${queryUrl }">
-	<c:param name="pageSize" value="${param.pageSize}" />
-</c:url>
-<c:choose>
-    <c:when test="${pageInfo.startPage == 1}">
-        <span class="">Start</span>
-        <span class="">PREV</span>
-    </c:when>
-    <c:otherwise>
-        <a href="${pagingUrl}">Start</a>
-        <a href="${pagingUrl}&page=${pageInfo.startPage - 1}">PREV</a>
-    </c:otherwise>
-</c:choose>
-<span>
-	<c:forEach var="page" begin="${pageInfo.startPage}" end="${pageInfo.endPage }">
-	<c:choose>
-	    <c:when test="${pageInfo.page == page}">
-	        <span class="disabled">${page}</span>
-	    </c:when>
-	    <c:otherwise>
-	    	<a href="${pagingUrl}&page=${page}">${page}</a>
-	    </c:otherwise>
-	</c:choose>
-	</c:forEach>
-</span>
 
-<c:choose>
-    <c:when test="${pageInfo.endPage == pageInfo.maxPage}">
-        <span class="disabled">NEXT</span>
-        <span class="disabled">End</span>
-    </c:when>
-    <c:otherwise>
-        <a href="${pagingUrl}&page=${pageInfo.endPage + 1}">NEXT</a>
-        <a href="${pagingUrl}&page=${pageInfo.maxPage}">End</a>
-    </c:otherwise>
-</c:choose>
+<div class="modal" id="modal"><div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h4 class="modal-title">Modal Heading</h4>
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+	</div>
+	<div class="modal-body" id="modal-body"></div>
+	<div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	</div>
+</div></div></div>
 
-</div>
-<div class="btn-bar">
-<button type="button" onclick="location.href='/board/write'">Write</button>
-</div>
-</footer>
 </body>
-<script>
-const urlParams = new URLSearchParams(window.location.search);
-const message = urlParams.get('message');
-window.onload = () => {
-	if(message != null && message.length > 0){
-		alert(message);
-	}	
-}
-</script>
+<%@include file="../includes/footer.jsp" %>
 </html>

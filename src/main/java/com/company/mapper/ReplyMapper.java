@@ -2,8 +2,6 @@ package com.company.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.company.domain.ReplyDTO;
 
 public interface ReplyMapper {

@@ -9,14 +9,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.domain.ReplyDTO;
 import com.company.service.ReplyService;
 
+import lombok.extern.log4j.Log4j;
+
 @RestController
 @RequestMapping("api/board")
+@Log4j
 public class BoardApiController {
 	@Autowired
 	private ReplyService replyService;
@@ -32,7 +36,7 @@ public class BoardApiController {
 	}
 	
 	@PostMapping(path = "{boardIdx}")
-	public ResponseEntity<Void> write(@PathVariable long boardIdx,ReplyDTO replyDTO) {
+	public ResponseEntity<Void> write(@RequestBody ReplyDTO replyDTO, @PathVariable long boardIdx) {
 		replyDTO.setBoardIdx(boardIdx);
 		if(replyService.write(replyDTO)) {
 			return ResponseEntity.ok(null);
