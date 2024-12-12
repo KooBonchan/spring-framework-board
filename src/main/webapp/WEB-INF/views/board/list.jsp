@@ -3,17 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
+<head>
 <%@include file="../includes/header.jsp" %>
+<title>Board List</title>
+</head>
 <body>
 <div class="wrapper">
 	<%@include file="../includes/navbar.jsp" %>
 	<div id="page-wrapper">
-		<!-- PAGE-HEADER -->
-		<div class="row"><div class="col-lg-12">
-	    	<h2 class="page-header">LOGO</h2>
-	    </div></div>
-	    
-	    <!-- PAGE-BODY -->
 		<div class="row"><div class="col-lg-12"><div class="panel panel-default">
             <div class="panel-body">
             	<!-- PAGE SIZING -->
@@ -21,7 +18,7 @@
 					<c:param name="category" value="${param.category}" />
 				    <c:param name="query" value="${param.query}" />
 				</c:url>
-            	<div class="d-flex flex-row justify-content-between mb-3">
+            	<div class="d-flex flex-row justify-content-between mb-3 mt-3">
 	            	<form class="form-inline justify-content" role="form" action="${queryUrl}" name="form-page-size">
 						<div class="form-group">
 							<label for="pageSize" class="mr-3">Page Size:</label>
@@ -46,7 +43,7 @@
 						<c:param name="pageSize" value="${param.pageSize}" />
 					</c:url>
 					<form role="form" class="form-inline" action="${pageSizeUrl }" name="form-search">
-						<div class="form-group">
+						<div class="form-group mr-1">
 							<select class="form-control" name="category">
 								<option value="title" label="Title">
 								<option value="writer" label="Writer" ${param.category == "writer" ? 'selected' : ''}>
@@ -54,7 +51,7 @@
 							</select>
 						</div>
 						<div class="form-group mr-3"  style="flex-grow: 1;" >
-							<input style="width:100%;" class="form-control" name="query" value='${param.query}'>
+							<input style="width:100%;" class="form-control" name="query" value='<c:out value="${param.query}" />'>
 						</div>
 						
 						<div class="form-group">
@@ -79,11 +76,11 @@
                     </thead>
                     <tbody>
                         <c:forEach var="board" items="${boards}">
-						<tr onclick="location.href='/board?idx=${board.idx}'">
-							<td>${board.idx}</td>
-							<td>${board.title}</td>
-							<td>${board.writer}</td>
-							<td>${board.regDate}</td>
+						<tr onclick="location.href='/board?idx=<c:out value="${board.idx}" />'">
+							<td><c:out value="${board.idx}" /></td>
+							<td><c:out value="${board.title}" /></td>
+							<td><c:out value="${board.writer}" /></td>
+							<td><c:out value="${board.regDate}" /></td>
 						</tr>
 						</c:forEach>
                     </tbody>
@@ -134,17 +131,7 @@
 </div><!-- /.wrapper -->
 
 
-<div class="modal" id="modal"><div class="modal-dialog"><div class="modal-content">
-	<div class="modal-header">
-		<h4 class="modal-title">Modal Heading</h4>
-		<button type="button" class="close" data-dismiss="modal">&times;</button>
-	</div>
-	<div class="modal-body" id="modal-body"></div>
-	<div class="modal-footer">
-	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-	</div>
-</div></div></div>
-
-</body>
 <%@include file="../includes/footer.jsp" %>
+</body>
+
 </html>

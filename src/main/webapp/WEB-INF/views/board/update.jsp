@@ -24,11 +24,10 @@ textarea{
 	<h2>Write your document</h2>
 
 	<form method="post" name="form-write">
-	<input type="hidden" name="idx" value=${board.idx } />
+	<input type="hidden" name="idx" value="${board.idx }" />
 	<ul>
 		<li><input name="title" placeholder="Write Title" value="${board.title }" required /></li>
-		<li><input name="writer" placeholder="Writer Name"
-			autocomplete="username" disabled /></li>
+		<li><input value="${board.writer}" disabled /></li>
 		<li><textarea name="content"
 				placeholder="Write your content" required>${board.content }</textarea></li>
 		<li><input type="submit" value="submit"></li>

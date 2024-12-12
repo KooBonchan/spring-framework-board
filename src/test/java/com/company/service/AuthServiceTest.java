@@ -31,7 +31,7 @@ public class AuthServiceTest {
 	}
 	@Test
 	public void testSHA256() {
-		String password = "VincenGarcia";
+		String password = "TESTpasswordOF20!len";
 		String hashed = authService.SHA256(password);
 		log.info(hashed);
 		assertNotNull(hashed);

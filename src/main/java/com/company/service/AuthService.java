@@ -42,7 +42,7 @@ public class AuthService {
 	public String saltedSHA256(String password) {
 //		Business logic: use substring of hashed password as salt
 		String salt = SHA256(password);
-		return SHA256(password + salt.substring(20,37));
+		return SHA256(password + salt.substring(30,42));
 	}
 	public String SHA256(String src) {
 		try {

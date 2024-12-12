@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.company.domain.BoardDTO;
-import com.company.domain.ReplyDTO;
 
 import lombok.extern.log4j.Log4j;
 

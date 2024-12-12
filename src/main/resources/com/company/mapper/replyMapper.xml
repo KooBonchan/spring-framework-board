@@ -4,6 +4,7 @@
 <mapper namespace="com.company.mapper.ReplyMapper">
   <select id="findAll" parameterType="long" resultType="Reply">
     SELECT * FROM reply WHERE boardIdx = #{boardIdx}
+    order by idx desc
   </select>
   
     
