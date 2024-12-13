@@ -22,6 +22,9 @@ public class AuthService {
 	public boolean login(MemberDTO memberDTO) {
 		return memberMapper.login(memberDTO) != null;
 	}
+	public boolean checkUsername(String username) {
+		return memberMapper.checkUsername(username) == null;
+	}
 	public long signup(MemberDTO memberDTO) {
 		if(memberMapper.signup(memberDTO) > 0) {
 			return memberDTO.getIdx();

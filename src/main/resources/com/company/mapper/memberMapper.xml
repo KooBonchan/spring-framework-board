@@ -6,6 +6,9 @@
     select * from member
     where username=#{username} and password=#{password}
   </select>
+  <select id="checkUsername" parameterType="String" resultType="String">
+    select username from member where username=#{username}
+  </select>
   
   <insert id="signup" parameterType="Member">
     <selectKey keyProperty="idx" order="BEFORE" resultType="long">
