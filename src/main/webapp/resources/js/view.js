@@ -36,7 +36,9 @@ function submitReply(idx){
 	.then(response => {
 		formReply.content.value = "";
 		formReply.content.focus();
-		loadReplies(idx);
+		if(response.ok){
+			loadReplies(idx);
+		}
 	})
 	.catch(console.log)
 }
@@ -45,7 +47,12 @@ function deleteReply(boardIdx, idx){
 		method: "DELETE"
 	})
 	.then(response => {
-		loadReplies(boardIdx);
+		if(response.ok){
+			loadReplies(boardIdx);
+		} else {
+			$("#modal-body").html('Cannot delete the comment.');
+    		$("#modal").modal('show');
+		}
 	})
 	.catch(console.log)
 }

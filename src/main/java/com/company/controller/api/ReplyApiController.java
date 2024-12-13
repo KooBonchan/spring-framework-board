@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping("api/board")
 @Log4j
-public class BoardApiController {
+public class ReplyApiController {
 	@Autowired
 	private ReplyService replyService;
 	

@@ -81,3 +81,5 @@ values (seq_member.nextval, 'Vincen Garcia',
   -- VincenGarcia
 
 commit;
+
+select * from member;

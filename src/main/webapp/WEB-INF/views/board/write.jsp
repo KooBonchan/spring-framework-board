@@ -3,8 +3,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%@include file="../includes/header.jsp" %>
 <title>Write your Document</title>
 <style>
 input, textarea{
@@ -18,9 +17,9 @@ textarea{
 	margin-top:3px;
 }
 </style>
-
 </head>
 <body>
+<%@include file="../includes/navbar.jsp" %>
 	<h2>Write your document</h2>
 
 	<form method="post" name="form-write">
@@ -33,5 +32,6 @@ textarea{
 		<li><input type="submit" value="submit"></li>
 	</ul>
 	</form>
+<%@include file="../includes/footer.jsp" %>
 </body>
 </html>
