@@ -2,6 +2,8 @@ package com.company.controller.api;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,10 @@ public class ReplyApiController {
 	}
 	
 	@PostMapping(path = "{boardIdx}")
-	public ResponseEntity<Void> write(@RequestBody ReplyDTO replyDTO, @PathVariable long boardIdx) {
+	public ResponseEntity<Void> write(@RequestBody ReplyDTO replyDTO, @PathVariable long boardIdx, HttpSession session) {
+		Object writer = session.getAttribute("writer");
+		if(writer == null || ((String)writer).length() == 0) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		replyDTO.setWriter((String)writer);
 		replyDTO.setBoardIdx(boardIdx);
 		if(replyService.write(replyDTO)) {
 			return ResponseEntity.ok(null);

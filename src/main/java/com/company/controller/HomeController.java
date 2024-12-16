@@ -11,5 +11,6 @@ public class HomeController {
 	
 	@GetMapping("")
 	public String home() { return "home"; }
-	
+	@GetMapping("signup")
+	public void signup () {}
 }

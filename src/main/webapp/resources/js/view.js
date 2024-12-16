@@ -23,7 +23,6 @@ function loadReplies(idx){
 }
 function submitReply(idx){
 	const data = {
-		writer: formReply.writer.value,
 		content: formReply.content.value,
 	}
 	fetch("/api/board/" + idx, {

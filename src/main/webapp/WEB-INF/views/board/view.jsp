@@ -37,8 +37,8 @@
 	<c:when test="${not empty writer }">
 		<form name="form-reply" id="form-reply" onsubmit="return false;" class="row">
 			<div class="col-12 mb-1">
-				<span id="writer"> <c:out value="${writer}" /> </span>
-		        <input name="writer" id="writer" class="form-control" type="text" placeholder="Writer" required>
+				<span id="writer"> Writer: <c:out value="${writer}" /> </span>
+				<button type="button" class="btn btn-default" id="btn-logout" style="color:#999">Logout</button>
 		    </div>
 		    <div class="col-9">
 		        <textarea name="content" id="content" class="form-control" rows="4" placeholder="Content" required></textarea>
@@ -54,7 +54,7 @@
 				<span id="writer"> You need to log in to write reply. </span>
 			</div>
 			<div class="col-3">
-          <button id="btn-login" type="button" class="btn btn-primary w-100" onclick="login()">
+          <button id="btn-login" type="button" class="btn btn-primary w-100">
             Login
           </button>
       </div>
@@ -78,6 +78,7 @@ window.onload = () => {
 }
 </script>
 <script src="/resources/js/view.js"></script>
+<%@include file="../includes/login.jsp" %>
 <%@include file="../includes/footer.jsp" %>
 </body>
 </html>

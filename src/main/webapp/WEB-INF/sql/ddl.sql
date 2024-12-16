@@ -65,21 +65,19 @@ create table member(
 
 insert into member (idx, username, password)
 values (seq_member.nextval, 'Fourplay',
-  '0a6518cefc973b97cee5fe934d8e47ec40bb24702b3b4122d429017db2531be3');
+  'NathanEast');
   -- NathanEast
 insert into member (idx, username, password)
 values (seq_member.nextval, 'TSQ',
-  'd5117f2804ff59d68646c7af0597148b594844ba353a1eb0ac87c1eca5b9bd36');
+  '3910e27da414e42aca57df9f6390d5c7958a4bf98bbf48d387e02e2bfcbd3ffb');
   -- SutohMitsuru
 insert into member (idx, username, password)
 values (seq_member.nextval, 'Casiopea',
-  '28a771b935b814b736de61426e1702aca8823519fc5bd33dd81c33ac9f227ace');
+  'NaruseYoshihiro');
   -- NaruseYoshihiro
 insert into member (idx, username, password)
 values (seq_member.nextval, 'Vincen Garcia',
-  '3767a0a7dad6216feb3ec0db008131f4264e15f544bc3d054e30672e136b3fa6');
+  'VincenGarcia');
   -- VincenGarcia
-
+  
 commit;
-
-select * from member;

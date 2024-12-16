@@ -20,16 +20,29 @@ public class AuthService {
 	
 	
 	public boolean login(MemberDTO memberDTO) {
+		String password = memberDTO.getPassword();
+		if(password == null) return false;
+		memberDTO.setPassword(saltedSHA256(password));
 		return memberMapper.login(memberDTO) != null;
 	}
 	public boolean checkUsername(String username) {
 		return memberMapper.checkUsername(username) == null;
 	}
-	public long signup(MemberDTO memberDTO) {
-		if(memberMapper.signup(memberDTO) > 0) {
-			return memberDTO.getIdx();
+	public boolean signup(MemberDTO memberDTO) {
+		String password = memberDTO.getPassword();
+		if( ! verify(password)) return false;
+		password = saltedSHA256(password);
+		if(password == null) return false;
+		
+		memberDTO.setPassword(password);
+		try {
+			if(memberMapper.signup(memberDTO) > 0) {
+				return memberDTO.getIdx() > 0;
+			}
+		} catch (Exception e) {
+			log.warn("signup: " + e.getMessage());
 		}
-		return -1L;
+		return false;
 	}
 	
 	public boolean verify(String password) {
