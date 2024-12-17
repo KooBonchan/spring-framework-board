@@ -1,0 +1,7 @@
+table#board-list tr td:hover{
+	cursor: pointer;
+}
+
+#board-list .reply-count{
+	opacity: 0.6;
+}

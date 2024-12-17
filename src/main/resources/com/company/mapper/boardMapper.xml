@@ -44,11 +44,15 @@
     UPDATE board SET
     title = #{title},
     content = #{content},
-    updatedate = sysdate
+    updateDate = sysdate
+    WHERE idx = #{idx}
+  </update>
+  <update id="updateReply" parameterType="long">
+    UPDATE board SET
+    replyCount = replyCount + 1
     WHERE idx = #{idx}
   </update>
   <delete id="delete" parameterType="long">
     DELETE FROM board where idx = #{idx}  
   </delete>
-
 </mapper>

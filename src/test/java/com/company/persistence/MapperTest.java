@@ -55,10 +55,14 @@ public class MapperTest {
 	public void testReplyMapper() {
 		try {
 			boardMapper.write(testBoard);
-			assertTrue(testBoard.getIdx() > 0);
-			testReply.setBoardIdx(testBoard.getIdx());
+			long boardIdx = testBoard.getIdx(); 
+			assertTrue(boardIdx > 0);
+			
+			testReply.setBoardIdx(boardIdx);
 			replyMapper.write(testReply);
 			assertTrue(testReply.getIdx() > 0);
+			assertTrue(boardMapper.updateReply(boardIdx) > 0);
+			
 			boardMapper.delete(testBoard.getIdx());
 		} catch (Exception e) {
 			fail(e.getMessage());

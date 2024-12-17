@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.company.config.BoardConfig;
 import com.company.domain.PageDTO;
-import com.company.domain.ReplyDTO;
 import com.company.mapper.BoardMapper;
 
 import lombok.extern.log4j.Log4j;
@@ -33,16 +32,11 @@ public class BoardServiceTest {
 	@InjectMocks
 	private BoardServiceImpl boardService;
 	
-	private ReplyDTO testReply;
-	
-	
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		
-		testReply = new ReplyDTO();
-		testReply.setWriter("TESTW");
-		testReply.setContent("TESTC");
+		
 	}
 	
 	@Test
@@ -70,7 +64,6 @@ public class BoardServiceTest {
 		assertEquals("startPage", 1, pageDTO.getStartPage());
 		assertEquals("endPage", 2, pageDTO.getEndPage());
 		assertEquals("maxPage", 2, pageDTO.getMaxPage());
-		
 	}
 	
 }

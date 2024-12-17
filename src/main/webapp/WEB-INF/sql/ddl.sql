@@ -11,6 +11,7 @@ create table board(
   writer varchar2(50) not null,
   regdate date default sysdate not null,
   updatedate date default sysdate not null,
+  replyCount number(5,0) default 0 not null,
   constraint pk_board_idx primary key (idx)
 );
 create sequence seq_board;
@@ -52,6 +53,9 @@ insert into reply (idx, writer, content, boardIdx)
 values (seq_reply.nextval, 'Vincen Garcia', 'I''ve been inspired', 2);
 insert into reply (idx, writer, content, boardIdx)
 values (seq_reply.nextval, 'Vincen Garcia', 'I''ve been inspired', 4);
+update board set
+replyCount = 1
+where idx = 1 or idx = 2 or idx = 4;
 
 
 create sequence seq_member;
