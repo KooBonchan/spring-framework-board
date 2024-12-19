@@ -1,6 +1,10 @@
+drop sequence seq_board_image;
 drop sequence seq_reply;
 drop sequence seq_board;
 drop sequence seq_member;
+
+drop table boardImage;
+drop table memberAuth;
 drop table reply;
 drop table board;
 drop table member;
@@ -12,6 +16,7 @@ create table board(
   regdate date default sysdate not null,
   updatedate date default sysdate not null,
   replyCount number(5,0) default 0 not null,
+  imageCount number(5,0) default 0 not null
   constraint pk_board_idx primary key (idx)
 );
 create sequence seq_board;
@@ -62,8 +67,9 @@ create sequence seq_member;
 create table member(
  idx number(10,0) not null,
  username varchar2(50) unique,
- password char(64) not null,
+ password varchar2(60) not null,
  regdate date default sysdate not null,
+ enabled char(1) default '1' not null,
  constraint pk_member primary key (idx)
 );
 
@@ -83,5 +89,41 @@ insert into member (idx, username, password)
 values (seq_member.nextval, 'Vincen Garcia',
   'VincenGarcia');
   -- VincenGarcia
-  
+
+create table memberAuth (
+  username varchar2(50) not null,
+  auth varchar2(50) not null,
+  primary key (username, auth),
+  constraint fk_member_auth foreign key(username)
+    references member(username)
+);
+
+
+create table persistent_logins (
+  username varchar2(64) not null,
+  series varchar2(64) not null,
+  token varchar2(64) not null,
+  last_used timestamp not null
+);
+
+
+create table boardImage(
+  idx number(10,0) primary key,
+  boardIdx number(10,0),
+  originalFileName varchar2(64) not null,
+  realFileName varchar2(40) not null,
+  filePath varchar2(40) not null,
+  regDate date default sysdate not null,
+  constraint fk_board_image foreign key(boardIdx)
+    references board(idx) on delete set null
+);
+
+create index idx_board_image on boardImage(boardIdx);
+create sequence seq_board_image;
+
+insert into boardImage (idx, boardIdx, originalFileName, realFileName, filePath)
+values (seq_board_image.nextval, 8, 'testfile', 'tteessttffiillee', '/t/e/s/t');
+
 commit;
+
+select * from board;

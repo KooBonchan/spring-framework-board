@@ -15,16 +15,16 @@
 		<level value="info" />
 	</logger>
   
-    <!-- JDBC -->
-    <logger name="jdbc.audit">
-      <level value="warn" />
-    </logger>
-    <logger name="jdbc.connection">
-      <level value="warn" />
-    </logger>
-    <logger name="jdbc.resultset">
-      <level value="warn" />
-    </logger>
+  <!-- JDBC -->
+  <logger name="jdbc.audit">
+    <level value="warn" />
+  </logger>
+  <logger name="jdbc.connection">
+    <level value="warn" />
+  </logger>
+  <logger name="jdbc.resultset">
+    <level value="warn" />
+  </logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">

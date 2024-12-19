@@ -15,49 +15,46 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-  	  <property name="locations">
-        <value>classpath:jdbc.properties</value>
-      </property>
-    </bean>
+	  <property name="locations">
+      <value>classpath:jdbc.properties</value>
+    </property>
+  </bean>
     
-    <!-- Hikari -->
-    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-      <property name="driverClassName" value="${jdbc.driverClassName}"></property>
-      <property name="jdbcUrl" value="${jdbc.url}"></property>
-      <property name="username" value="${jdbc.username}"></property>
-      <property name="password" value="${jdbc.password}"></property>
-    </bean>
-    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
-      <constructor-arg ref="hikariConfig"></constructor-arg>
-    </bean>
-    
-    <!-- MyBatis -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-      <property name="dataSource" ref="dataSource"></property>
-      <property name="configLocation" value="classpath:/com/company/mybatis-config.xml"></property>
-      <property name="mapperLocations" value="classpath:/com/company/mapper/*.xml"></property>
-    </bean>
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-      <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
-    </bean>
-    <mybatis-spring:scan base-package="com.company.mapper"/>
-    
-    
-    <!-- Board Config Beans -->
-    <bean class="java.util.HashSet" id="categorySet">
-      <constructor-arg><list>
-         <value>title</value>
-         <value>content</value>
-         <value>writer</value>
-      </list></constructor-arg>
-    </bean>
-    
-    <!-- AOP -->
-    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
-    <context:component-scan base-package="com.company.aop"></context:component-scan>
-    
-    
-    <context:component-scan base-package="com.company.service"></context:component-scan>
-    <context:component-scan base-package="com.company.config" />
-    
+  <!-- Hikari -->
+  <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+    <property name="driverClassName" value="${jdbc.driverClassName}"></property>
+    <property name="jdbcUrl" value="${jdbc.url}"></property>
+    <property name="username" value="${jdbc.username}"></property>
+    <property name="password" value="${jdbc.password}"></property>
+  </bean>
+  <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <constructor-arg ref="hikariConfig"></constructor-arg>
+  </bean>
+  
+  <!-- MyBatis -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="configLocation" value="classpath:/com/company/mybatis-config.xml"></property>
+    <property name="mapperLocations" value="classpath:/com/company/mapper/*.xml"></property>
+  </bean>
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+  </bean>
+  <mybatis-spring:scan base-package="com.company.mapper"/>
+  
+  
+  <!-- Board Config Beans -->
+  <bean class="java.util.HashSet" id="categorySet">
+    <constructor-arg><list>
+       <value>title</value>
+       <value>content</value>
+       <value>writer</value>
+    </list></constructor-arg>
+  </bean>
+  
+  <!-- AOP -->
+  <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+  <context:component-scan base-package="com.company.aop"></context:component-scan>
+  <context:component-scan base-package="com.company.service"></context:component-scan>
+  <context:component-scan base-package="com.company.config" />
 </beans>

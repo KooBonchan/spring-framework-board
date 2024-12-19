@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.company.mapper.BoardMapper">
+
+  <resultMap type="Board" id="boardViewMap">
+    <id property="idx" column="idx" />
+    <result property="title" column="title" />
+    <result property="content" column="content" />
+    <result property="writer" column="writer" />
+    <result property="regDate" column="regDate" />
+    <result property="updateDate" column="updateDate" />
+    <result property="replyCount" column="replyCount" />
+    <result property="imageCount" column="imageCount" />
+    
+    <collection property="images" ofType="Image">
+      <result property="originalFileName" column="originalFileName"/>
+      <result property="realFileName" column="realFileName"/>
+      <result property="filePath" column="filePath" />
+    </collection>
+    
+  </resultMap>
+  
   <!-- READ -->
   <select id="findAll" resultType="Board">
     SELECT * FROM board
@@ -27,10 +46,15 @@
     </if>
   </select>
   
-  <select id="findByIdx" parameterType="long" resultType="Board">
-    SELECT * FROM board where idx = #{idx}
+  <select id="findByIdx" parameterType="long" resultMap="boardViewMap">
+    SELECT
+      b.idx, b.title, b.content, b.writer, b.regDate, b.updateDate, b.replyCount, b.imageCount,
+      i.originalFileName, i.realFileName
+    FROM board b
+      LEFT OUTER JOIN boardImage i
+      ON b.idx = i.boardIdx
+    where b.idx = #{idx}
   </select>
-  
   
   <!-- CREATE, UPDATE, DELETE -->
   <insert id="write" parameterType="Board">

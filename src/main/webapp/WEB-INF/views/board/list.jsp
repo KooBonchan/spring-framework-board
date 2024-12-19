@@ -143,7 +143,6 @@
 </div><!-- /.page-wrapper -->
 </div><!-- /.wrapper -->
 
-
 <%@include file="../includes/footer.jsp" %>
 </body>
 

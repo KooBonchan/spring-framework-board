@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mapper.ImageMapper">
+  <insert id="upload" parameterType="Image">
+    <selectKey keyProperty="idx" order="BEFORE" resultType="long">
+      select seq_board_image.nextval from dual
+    </selectKey>
+    INSERT INTO boardImage (idx, boardIdx, originalFileName, realFileName, filePath)
+    values (#{idx}, #{boardIdx}, #{originalFileName}, #{realFileName}, #{filePath})
+  </insert>
+  <delete id="delete" parameterType="Image">
+    DELETE FROM boardImage
+    WHERE boardIdx = #{boardIdx} and idx = #{idx}
+  </delete>
+  
+
+</mapper>

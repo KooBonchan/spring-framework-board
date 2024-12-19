@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.company.config.BoardConfig;
 import com.company.domain.BoardDTO;
@@ -32,15 +33,16 @@ public class BoardServiceImpl implements BoardService {
 				startIdx, endIdx, verifiedCategory(category), verifiedQuery(query));
 	}
 	
-	
-	
 	public BoardDTO get(long idx) {
 		return boardMapper.findByIdx(idx);
 	}
 	
-	
+	@Transactional
 	public boolean register(BoardDTO boardDTO) {
-		return boardMapper.write(boardDTO) > 0;
+		//TODO
+		boardMapper.write(boardDTO);
+		
+		return false;
 	}
 	public boolean modify(BoardDTO boardDTO) {
 		return boardMapper.update(boardDTO) > 0;

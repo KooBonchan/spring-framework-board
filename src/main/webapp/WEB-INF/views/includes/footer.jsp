@@ -12,9 +12,8 @@
 	</div>
 </div></div></div>
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const message = urlParams.get('message');
 $(document).ready(function() {
+	const message = "${empty message ? '' : message}";	
     if(message != null && message.length > 0){
     	$("#modal-message-body").html(message);
     	$("#modal-message").modal('show');

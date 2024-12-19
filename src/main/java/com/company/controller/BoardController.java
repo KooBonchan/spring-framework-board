@@ -1,8 +1,5 @@
 package com.company.controller;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.company.domain.BoardDTO;
 import com.company.domain.PageDTO;
@@ -49,57 +48,64 @@ public class BoardController {
 	}
 	
 	@GetMapping(path = "", params = "idx")
-	public String view(Model model, @RequestParam long idx) {
+	public String view(Model model, @RequestParam long idx, RedirectAttributes redirectAttributes) {
 		BoardDTO boardDTO = boardService.get(idx);
 		if(boardDTO != null) {
 			model.addAttribute("board", boardDTO);
 			return "board/view";
 		}
-		return toHomeWithMessage("Document not found");
+		redirectAttributes.addFlashAttribute("message", "document not found");
+		return "redirect:/board";
 	}
 	
 	@GetMapping("write")
 	public void writeForm () {};
 	@PostMapping({"", "write"})
-	public String write(BoardDTO boardDTO) {
-		String message = "failed to write new document";
+	public String write(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
+		String message = "failed to write new document";		
+		for(MultipartFile file : boardDTO.getFiles()) {
+			log.warn(file.getOriginalFilename());
+			log.warn(file.getSize());
+		}
 		if(boardService.register(boardDTO)) {
 			message= "Successfully uploaded your document"; 
 		}
-		return toHomeWithMessage(message);
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:/board";
 	}
 	
 	@GetMapping("update")
-	public String updateForm(Model model, @RequestParam("idx") long idx) {
+	public String updateForm(Model model, @RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
 		BoardDTO boardDTO = boardService.get(idx);
 		if(boardDTO != null) {
 			model.addAttribute("board", boardDTO);
 			return "board/update";
 		}
-		model.addAttribute(boardDTO);
-		return toHomeWithMessage("Document not found");
+		redirectAttributes.addFlashAttribute("message", "document not found");
+		return "redirect:/board";
 	}
 	@PostMapping("update")
-	public String update(BoardDTO boardDTO) {
+	public String update(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
+		
 		String message = "failed to update document";
 		if(boardService.modify(boardDTO)) {
-			message= "successfully updated the document."; 
+			redirectAttributes.addFlashAttribute("message",  "successfully updated the document."); 
+		} else {
+			redirectAttributes.addFlashAttribute("message",  "failed to update document");
 		}
-		return toHomeWithMessage(message);
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:/board";
 	}
 	
 	
 	@GetMapping("delete")
-	public String delete(@RequestParam("idx") long idx) {
+	public String delete(@RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
 		String message = "failed to delete document";
 		if(boardService.remove(idx)) {
 			message= "successfully deleted the document."; 
 		}
-		return toHomeWithMessage(message);
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:/board";
 	}
 	
-	
-	private String toHomeWithMessage(String message) {
-		return "redirect:/board?message=" + URLEncoder.encode(message,StandardCharsets.UTF_8);
-	}
 }

@@ -25,6 +25,7 @@ public interface BoardMapper {
 	/* CREATE, UPDATE, DELETE */
 	int write(BoardDTO boardDTO);
 	int update(BoardDTO boardDTO);
+	int updateImageCount(BoardDTO boardDTO);
 	int updateReply(long idx);
 	int delete(long idx);
 }
