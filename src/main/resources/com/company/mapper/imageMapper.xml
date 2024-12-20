@@ -13,6 +13,4 @@
     DELETE FROM boardImage
     WHERE boardIdx = #{boardIdx} and idx = #{idx}
   </delete>
-  
-
 </mapper>
