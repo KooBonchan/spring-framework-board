@@ -29,8 +29,8 @@ public class ImageApiController {
 		@PathVariable("filename") String filename
 	){
 		log.info(path + ": " +  filename);
-		path = path.replace("_SLASH_", "/");
-		filename = filename.replace("_DOT_", ".");
+		path = decodeImagePath(path);
+		filename = decodeRealFileName(filename);
 		File dir = new File(basePath, path + File.separator + thumbnailFolder);
 		File file = new File(dir, filename);
 		try {
@@ -68,5 +68,12 @@ public class ImageApiController {
 		catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
+	
+	private String decodeImagePath(String imagePath) {
+		return imagePath.replace("_SLASH_", File.separator);
+	}
+	private String decodeRealFileName(String realFileName) {
+		return realFileName.replace("_DOT_", ".");
 	}
 }

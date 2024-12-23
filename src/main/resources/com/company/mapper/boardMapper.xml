@@ -49,7 +49,7 @@
   <select id="findByIdx" parameterType="long" resultMap="boardViewMap">
     SELECT
       b.idx, b.title, b.content, b.writer, b.regDate, b.updateDate, b.replyCount, b.imageCount,
-      i.originalFileName, i.realFileName
+      i.originalFileName, i.realFileName, i.filePath
     FROM board b
       LEFT OUTER JOIN boardImage i
       ON b.idx = i.boardIdx

@@ -52,8 +52,6 @@ public class BoardServiceImpl implements BoardService {
 			imageDTO.setBoardIdx(boardIdx);
 			imageResult = imageMapper.upload(imageDTO);
 		}
-		
-		
 		return imageResult > 0 && boardResult > 0;
 	}
 	public boolean modify(BoardDTO boardDTO) {

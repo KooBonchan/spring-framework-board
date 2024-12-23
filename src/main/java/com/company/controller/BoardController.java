@@ -78,11 +78,10 @@ public class BoardController {
 	@PostMapping({"", "write"})
 	public String write(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 		String message = "failed to write new document";
-		File uploadPath = getPathByDate();
 		List<ImageDTO> images = new ArrayList<>();
 		for(MultipartFile mFile : boardDTO.getFiles()) {
 			try {
-				var image = saveFile(mFile, uploadPath);
+				var image = saveFile(mFile);
 				if(image != null) {
 					images.add(image);
 				}
@@ -138,15 +137,11 @@ public class BoardController {
 	
 	
 	/* FILE UTILS */
-	private File getPathByDate() {
-		String rawPath = new SimpleDateFormat("yy-MM-dd")
+	private String getPathByDate() {
+		return new SimpleDateFormat("yy-MM-dd")
 				.format(new Date())
 				.replace("-", File.separator);
-		File path = new File(basePath, rawPath);
-		if( ! path.exists()) {
-			path.mkdirs();
-		}
-		return path;
+		
 	}
 	
 	private boolean checkImageType(File file) {
@@ -159,10 +154,15 @@ public class BoardController {
 		return false;
 	}
 	
-	private ImageDTO saveFile(MultipartFile mFile,
-			File uploadPath) throws IOException {
+	private ImageDTO saveFile(MultipartFile mFile) throws IOException {
+		String rawPath = getPathByDate();
+		File uploadPath = new File(basePath, rawPath);
+		if( ! uploadPath.exists()) {
+			uploadPath.mkdirs();
+		}
 		log.info("uploaded file: " + mFile.getOriginalFilename());
 		log.info("uploaded filesize: "+ mFile.getSize());
+
 		if( ! mFile.getContentType().startsWith("image")) {
 			log.warn("NONE-IMAGE: " + mFile.getOriginalFilename());
 			return null;
@@ -173,9 +173,9 @@ public class BoardController {
 		String realFileName = uuid.toString() + ext;
 		
 		ImageDTO imageDTO = new ImageDTO();
-		imageDTO.setFilePath(uploadPath.toString());
+		imageDTO.setFilePath(encodeImagePath(rawPath.toString()));
 		imageDTO.setOriginalFileName(originalFileName);
-		imageDTO.setRealFileName(realFileName);
+		imageDTO.setRealFileName(encodeRealFileName(realFileName));
 		
 		File realFile = new File(uploadPath, realFileName);
 		mFile.transferTo(realFile);
@@ -200,5 +200,15 @@ public class BoardController {
 		
 		return false;
 	}
+	
+	private String encodeImagePath(String imagePath) {
+		return imagePath.replace(File.separator, "_SLASH_");
+	}
+	
+	
+	private String encodeRealFileName(String realFileName) {
+		return realFileName.replace(".", "_DOT_");
+	}
+	
 	
 }

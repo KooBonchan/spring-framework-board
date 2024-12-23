@@ -106,12 +106,11 @@ create table persistent_logins (
   last_used timestamp not null
 );
 
-
 create table boardImage(
   idx number(10,0) primary key,
   boardIdx number(10,0),
   originalFileName varchar2(64) not null,
-  realFileName varchar2(40) not null,
+  realFileName varchar2(64) not null,
   filePath varchar2(40) not null,
   regDate date default sysdate not null,
   constraint fk_board_image foreign key(boardIdx)
@@ -125,5 +124,3 @@ insert into boardImage (idx, boardIdx, originalFileName, realFileName, filePath)
 values (seq_board_image.nextval, 8, 'testfile', 'tteessttffiillee', '/t/e/s/t');
 
 commit;
-
-select * from board;

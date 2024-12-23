@@ -1,0 +1,20 @@
+.image-wrapper{
+	padding:1px 0;
+	cursor: pointer;
+}
+
+#big-image-background{
+	position:fixed;
+	left:0;
+	top:0;
+	width:100vw;
+	height:100vh;
+	background-color: rgba(220,220,220, 0.5);
+	display:none;
+	justify-content:center;
+  align-items: center;
+}
+#image-fullscreen{
+	max-width:900px;
+	cursor: pointer;
+}

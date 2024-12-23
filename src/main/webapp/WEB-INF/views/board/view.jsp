@@ -8,6 +8,7 @@
 <title>Board View</title>
 <%@include file="../includes/header.jsp" %>
 <link rel="stylesheet" type="text/css" href="/resources/style/view.css">
+<link rel="stylesheet" type="text/css" href="/resources/style/imageview.css">
 </head>
 <body>
 <div class="wrapper">
@@ -26,9 +27,16 @@
 		<a href="/board/update?idx=<c:out value="${board.idx}"/>">Update</a>
 		<a href="/board/delete?idx=<c:out value="${board.idx}"/>">Delete</a>
 	</div>
-	<p class="content">
-	${board.content}
-	</p>
+	<p class="content"><c:out value='${board.content}' /></p>
+	<c:url var="baseUrl" value="/api/image/" />
+	<c:forEach var="image" items="${board.images}">
+	 <c:url var="pathUrl" value="${baseUrl}thumbnail/${image.filePath}/${image.realFileName}" />
+	 <div class="image-wrapper">
+   	 <img class="thumbnail" alt="attached images" src="${pathUrl}">
+	 </div>
+	 
+	</c:forEach>
+	
 </section>
 
 <section class="container">
@@ -72,11 +80,15 @@
 </div><!-- Page-Wrapper -->
 </div><!-- Wrapper -->
 
+<div id="big-image-background">
+  <img id="image-fullscreen" alt="FULLSCREEN IMAGE" src="">
+</div>
 <script>
 window.onload = () => {
-	loadReplies(${board.idx});
+	loadReplies(<c:out value="${board.idx}"/>);
 }
 </script>
+<script src="/resources/js/imageview.js"></script>
 <script src="/resources/js/view.js"></script>
 <%@include file="../includes/login.jsp" %>
 <%@include file="../includes/footer.jsp" %>
