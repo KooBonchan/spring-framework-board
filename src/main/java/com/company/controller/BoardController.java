@@ -88,15 +88,17 @@ public class BoardController {
 				}
 			} catch (IOException e) {
 				log.error("Error while saving file: " + e.getMessage());
+				redirectAttributes.addFlashAttribute(message);
+				return "redirect:/board/write";
 			}
 		}
-		log.warn("images: " + images);
+		boardDTO.setFiles(null);
+		boardDTO.setImages(images);
+		if(boardService.register(boardDTO)) {
+			message= "Successfully uploaded your document"; 
+		}
+		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/board";
-//		if(boardService.register(boardDTO)) {
-//			message= "Successfully uploaded your document"; 
-//		}
-//		redirectAttributes.addFlashAttribute("message", message);
-//		return "redirect:/board";
 	}
 	
 	@GetMapping("update")
@@ -188,9 +190,15 @@ public class BoardController {
 			Thumbnailator.createThumbnail(
 				mFile.getInputStream(),
 				thumbnailStream,
-				100, 100);
+				200, 200);
 		}
 		return imageDTO;
+	}
+	
+	private boolean deleteFile(ImageDTO imageDTO) {
+		File path = new File(basePath, imageDTO.getFilePath());
+		
+		return false;
 	}
 	
 }

@@ -57,4 +57,6 @@
   <context:component-scan base-package="com.company.aop"></context:component-scan>
   <context:component-scan base-package="com.company.service"></context:component-scan>
   <context:component-scan base-package="com.company.config" />
+  
+  <tx:annotation-driven/>
 </beans>

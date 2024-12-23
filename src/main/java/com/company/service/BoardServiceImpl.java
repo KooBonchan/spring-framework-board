@@ -8,13 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.company.config.BoardConfig;
 import com.company.domain.BoardDTO;
+import com.company.domain.ImageDTO;
 import com.company.domain.PageDTO;
 import com.company.mapper.BoardMapper;
+import com.company.mapper.ImageMapper;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardMapper boardMapper;
+	@Autowired
+	private ImageMapper imageMapper;
 	@Autowired
 	private BoardConfig boardConfig;
 	
@@ -39,10 +43,18 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	public boolean register(BoardDTO boardDTO) {
+		int imageResult = 0, boardResult = 0;
 		//TODO
-		boardMapper.write(boardDTO);
+		boardDTO.setImageCount(boardDTO.getImages().size());
+		boardResult = boardMapper.write(boardDTO);
+		long boardIdx = boardDTO.getIdx();
+		for(ImageDTO imageDTO : boardDTO.getImages()) {
+			imageDTO.setBoardIdx(boardIdx);
+			imageResult = imageMapper.upload(imageDTO);
+		}
 		
-		return false;
+		
+		return imageResult > 0 && boardResult > 0;
 	}
 	public boolean modify(BoardDTO boardDTO) {
 		return boardMapper.update(boardDTO) > 0;

@@ -2,6 +2,7 @@ package com.company.controller;
 
 import static org.junit.Assert.fail;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +40,7 @@ public class BoardControllerTest {
 		testBoard.setWriter("TESTW");
 	}
 	
-	@BeforeClass
+	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 	}
