@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.company.mapper.ImageMapper">
+  <select id="findManyByIdx" resultType="Image">
+  select filePath, realFileName
+  from boardImage
+  where boardIdx = #{boardIdx}
+    <if test="idxs != null">
+    and idx in
+    <foreach collection="idxs" item="idx" 
+      open='(' close=')' separator=",">
+      #{idx}
+    </foreach>
+    </if>
+    
+  </select>
+
+
   <insert id="upload" parameterType="Image">
     <selectKey keyProperty="idx" order="BEFORE" resultType="long">
       select seq_board_image.nextval from dual
@@ -9,8 +24,23 @@
     INSERT INTO boardImage (idx, boardIdx, originalFileName, realFileName, filePath)
     values (#{idx}, #{boardIdx}, #{originalFileName}, #{realFileName}, #{filePath})
   </insert>
+  
   <delete id="delete" parameterType="Image">
     DELETE FROM boardImage
     WHERE boardIdx = #{boardIdx} and idx = #{idx}
   </delete>
+  <delete id="deleteAll" parameterType="long">
+    DELETE FROM boardImage
+    WHERE boardIdx = #{boardIdx}
+  </delete>
+  <delete id="deleteManyByIdx">
+  delete from boardImage
+  where boardIdx = #{boardIdx}
+    and idx in
+    <foreach collection="idxs" item="idx"
+      open='(' close=')' separator=",">
+      #{idx}
+    </foreach>
+  </delete>
+  
 </mapper>

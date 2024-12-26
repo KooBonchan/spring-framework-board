@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.image-container {
+	height:100%;
+}
+.image-container.deleted {
+	position:relative;
+}
+
+.image-container.deleted::after {
+	content: "×";
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background-color:gray;
+	opacity: 0.8;
+	text-align:center;
+	align-content:center;
+	font-size:50px;
+	line-height:25px;
+	padding-bottom: 13px;
+	color:red;
+}

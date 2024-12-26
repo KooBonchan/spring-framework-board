@@ -14,6 +14,7 @@
     <result property="imageCount" column="imageCount" />
     
     <collection property="images" ofType="Image">
+      <result property="idx" column="imageIdx"/>
       <result property="originalFileName" column="originalFileName"/>
       <result property="realFileName" column="realFileName"/>
       <result property="filePath" column="filePath" />
@@ -49,7 +50,7 @@
   <select id="findByIdx" parameterType="long" resultMap="boardViewMap">
     SELECT
       b.idx, b.title, b.content, b.writer, b.regDate, b.updateDate, b.replyCount, b.imageCount,
-      i.originalFileName, i.realFileName, i.filePath
+      i.idx as imageIdx, i.originalFileName, i.realFileName, i.filePath
     FROM board b
       LEFT OUTER JOIN boardImage i
       ON b.idx = i.boardIdx
@@ -68,6 +69,7 @@
     UPDATE board SET
     title = #{title},
     content = #{content},
+    imageCount = imageCount + #{imageCount},
     updateDate = sysdate
     WHERE idx = #{idx}
   </update>

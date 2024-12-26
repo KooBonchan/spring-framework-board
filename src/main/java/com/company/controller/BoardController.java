@@ -1,12 +1,17 @@
 package com.company.controller;
 
+import static com.company.util.ImageUtil.decodeImagePath;
+import static com.company.util.ImageUtil.decodeRealFileName;
+import static com.company.util.ImageUtil.encodeImagePath;
+import static com.company.util.ImageUtil.encodeRealFileName;
+import static com.company.util.ImageUtil.getPathByDate;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,6 +85,7 @@ public class BoardController {
 		String message = "failed to write new document";
 		List<ImageDTO> images = new ArrayList<>();
 		for(MultipartFile mFile : boardDTO.getFiles()) {
+			if(mFile.getSize() == 0) continue;
 			try {
 				var image = saveFile(mFile);
 				if(image != null) {
@@ -112,38 +118,64 @@ public class BoardController {
 	}
 	@PostMapping("update")
 	public String update(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("idx", boardDTO.getIdx());
 		
-		String message = "failed to update document";
-		if(boardService.modify(boardDTO)) {
-			redirectAttributes.addFlashAttribute("message",  "successfully updated the document."); 
+		List<ImageDTO> images = new ArrayList<>();
+		for(MultipartFile mFile : boardDTO.getFiles()) {
+			if(mFile.getSize() == 0) continue;
+			try {
+				var image = saveFile(mFile);
+				if(image != null) {
+					images.add(image);
+				}
+			} catch (IOException e) {
+				log.error("Error while saving file: " + e.getMessage());
+				redirectAttributes.addFlashAttribute("message", "Failed to upload your images. Try again later");
+				redirectAttributes.addAttribute("id", boardDTO.getIdx());
+				return "redirect:/board/update";
+			}
+		}
+		boardDTO.setFiles(null);
+		boardDTO.setImages(images);
+		List<ImageDTO> toBeDeleted = boardService.modify(boardDTO); 
+		if(toBeDeleted != null) {
+			redirectAttributes.addFlashAttribute("message",  "successfully updated the document.");
+			for(ImageDTO image : toBeDeleted) {
+				try {
+					deleteFile(image);
+				} catch(IOException e) {
+					log.error("Failed to delete image:" + image.getRealFileName());
+				} catch(Exception e) {
+					redirectAttributes.addFlashAttribute("message","failed to delete image");
+				}
+			}
+			return "redirect:/board";
 		} else {
 			redirectAttributes.addFlashAttribute("message",  "failed to update document");
+			return "redirect:/board/update";
 		}
-		redirectAttributes.addFlashAttribute("message", message);
-		return "redirect:/board";
 	}
-	
 	
 	@GetMapping("delete")
 	public String delete(@RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
-		String message = "failed to delete document";
-		if(boardService.remove(idx)) {
-			message= "successfully deleted the document."; 
+		List<ImageDTO> toBeDeleted = boardService.remove(idx);
+		if(toBeDeleted != null) {
+			for(ImageDTO image : toBeDeleted) {
+				try {
+					deleteFile(image);
+				} catch(IOException e) {
+					log.error("Failed to delete image:" + image.getRealFileName());
+				} catch(Exception e) {
+					redirectAttributes.addFlashAttribute("message","Error occurred while deleting your document");
+					return "redirect:/board";
+				}
+			}
 		}
-		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addFlashAttribute("message","successfully deleted the document.");
 		return "redirect:/board";
 	}
 	
-	
-	
 	/* FILE UTILS */
-	private String getPathByDate() {
-		return new SimpleDateFormat("yy-MM-dd")
-				.format(new Date())
-				.replace("-", File.separator);
-		
-	}
-	
 	private boolean checkImageType(File file) {
 		try {
 			String contentType = Files.probeContentType(file.toPath());
@@ -195,20 +227,15 @@ public class BoardController {
 		return imageDTO;
 	}
 	
-	private boolean deleteFile(ImageDTO imageDTO) {
-		File path = new File(basePath, imageDTO.getFilePath());
+	private void deleteFile(ImageDTO imageDTO) throws IOException{
+		String filePath = decodeImagePath(imageDTO.getFilePath());
+		String realFileName = decodeRealFileName(imageDTO.getRealFileName());
+		File path = new File(basePath, filePath);
+		File file = new File(path, realFileName);
+		File thumbnail = new File(path, thumbnailFolder + File.separator + realFileName);
 		
-		return false;
+		file.delete();
+		thumbnail.delete();
 	}
-	
-	private String encodeImagePath(String imagePath) {
-		return imagePath.replace(File.separator, "_SLASH_");
-	}
-	
-	
-	private String encodeRealFileName(String realFileName) {
-		return realFileName.replace(".", "_DOT_");
-	}
-	
 	
 }

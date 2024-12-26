@@ -1,7 +1,10 @@
 package com.company.persistence;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,6 +102,18 @@ public class MapperTest {
 			
 			assertTrue(imageMapper.delete(testImage) > 0);
 			assertTrue(boardMapper.delete(boardIdx) > 0);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testBoardImage() {
+		try {
+			long[] idxs =  {27L}; //TODO: fix idxs after board reset
+			List<ImageDTO> result = imageMapper.findManyByIdx(8L, idxs);
+			assertNotNull(result);
+			
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

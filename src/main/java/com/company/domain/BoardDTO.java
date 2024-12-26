@@ -7,8 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
+/*
+ * Communication btw View and controller
+ * Translated from/to BoardVO at service layer maybe? 
+ */
 @Data
 public class BoardDTO {
+	
 	private long idx;
 	private String title;
 	private String content;
@@ -18,10 +23,7 @@ public class BoardDTO {
 	private int replyCount;
 	private int imageCount;
 	
-//	Files
-//	TODO: distinguish DTO and VO
-//	DTO - view ~ service
-//	VO - service ~ persistence
-	private List<ImageDTO> images;
 	private MultipartFile[] files;
+	private long[] deletedFiles;
+	private List<ImageDTO> images;
 }

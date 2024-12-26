@@ -121,6 +121,8 @@ create index idx_board_image on boardImage(boardIdx);
 create sequence seq_board_image;
 
 insert into boardImage (idx, boardIdx, originalFileName, realFileName, filePath)
-values (seq_board_image.nextval, 8, 'testfile', 'tteessttffiillee', '/t/e/s/t');
+values (seq_board_image.nextval, 8, '8string.jpg', '8string_DOT_jpg', 'test');
 
 commit;
+
+

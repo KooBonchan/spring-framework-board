@@ -87,12 +87,18 @@
 				<tr
 					onclick="location.href='/board?idx=<c:out value="${board.idx}" />'">
 					<td><c:out value="${board.idx}" /></td>
-					<td><c:out value="${board.title}" /> <c:if
+					<td><c:out value="${board.title}" />
+            <c:if
+              test="${board.imageCount > 0}">
+              <i class="far fa-file-image"></i>
+            </c:if>
+            <c:if
 							test="${board.replyCount > 0 }">
 							<span class="reply-count">[<c:out
 									value="${board.replyCount}" />]
 							</span>
-						</c:if></td>
+						</c:if>
+					</td>
 					<td><c:out value="${board.writer}" /></td>
 					<td><c:out value="${board.regDate}" /></td>
 				</tr>
@@ -120,9 +126,9 @@
 	
 			<c:forEach var="page" begin="${pageInfo.startPage}"
 				end="${pageInfo.endPage }">
-				<li
-					class="page-item ${pageInfo.page == page ? 'active' : '' }">
-					<a class="page-link" href="${pagingUrl}&page=${page}">${page}</a>
+				<li class="page-item ${pageInfo.page == page ? 'active' : '' }">
+					<a class="page-link"
+					 href="${pagingUrl}&page=${page}">${page}</a>
 				</li>
 			</c:forEach>
 	

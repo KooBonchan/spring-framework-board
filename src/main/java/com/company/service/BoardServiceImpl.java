@@ -1,5 +1,6 @@
 package com.company.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,27 +44,56 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	public boolean register(BoardDTO boardDTO) {
-		int imageResult = 0, boardResult = 0;
+		int imageResult = 1, boardResult = 0;
 		//TODO
 		boardDTO.setImageCount(boardDTO.getImages().size());
 		boardResult = boardMapper.write(boardDTO);
 		long boardIdx = boardDTO.getIdx();
 		for(ImageDTO imageDTO : boardDTO.getImages()) {
 			imageDTO.setBoardIdx(boardIdx);
-			imageResult = imageMapper.upload(imageDTO);
+			imageResult *= imageMapper.upload(imageDTO);
 		}
 		return imageResult > 0 && boardResult > 0;
 	}
-	public boolean modify(BoardDTO boardDTO) {
-		return boardMapper.update(boardDTO) > 0;
-	}
-	public boolean remove(long idx) {
-		return boardMapper.delete(idx) > 0;
-	}
-	public boolean remove(BoardDTO boardDTO) {
-		return remove(boardDTO.getIdx());
+	
+	@Transactional
+	public List<ImageDTO> modify(BoardDTO boardDTO) {
+		int imageResult = 1, boardResult = 0;
+		int addedImages = boardDTO.getImages().size();
+		int deletedImages = 0;
+		if(boardDTO.getDeletedFiles() != null) {
+			deletedImages = boardDTO.getDeletedFiles().length;
+		}
+		boardDTO.setImageCount(addedImages - deletedImages); // delta
+		boardResult = boardMapper.update(boardDTO);
+		long boardIdx = boardDTO.getIdx();
+		for(ImageDTO imageDTO : boardDTO.getImages()) {
+			imageDTO.setBoardIdx(boardIdx);
+			imageResult *= imageMapper.upload(imageDTO);
+		}
+		
+		if(boardDTO.getDeletedFiles() == null) {
+			return new ArrayList<ImageDTO>();
+		}
+		List<ImageDTO> toBeDeleted = imageMapper.findManyByIdx(boardDTO.getIdx(), boardDTO.getDeletedFiles());
+		imageMapper.deleteManyByIdx(boardIdx, boardDTO.getDeletedFiles());
+		if(boardResult > 0 && imageResult > 0 ) {
+			return toBeDeleted;
+		}
+		return null;
 	}
 	
+	@Transactional
+	public List<ImageDTO> remove(long idx) {
+		BoardDTO boardDTO = boardMapper.findByIdx(idx);
+		imageMapper.deleteAll(idx);
+		if(	boardMapper.delete(idx) > 0 ) {
+			List<ImageDTO> toBeDeleted = boardDTO.getImages();
+			if(toBeDeleted == null) toBeDeleted = new ArrayList<ImageDTO>();
+			return toBeDeleted;
+		}
+		return null;
+	}
 	
 	/* Paging */
 	public PageDTO getPageInfo(int page, int pageSize) {
