@@ -1,13 +1,20 @@
 @charset "UTF-8";
 
-.image-container {
+.image-container{
+	display: flex;
+	justify-content: space-around;
+	gap:20px;
+	flex-wrap: wrap;
+}
+
+.image-wrapper {
 	height:100%;
 }
-.image-container.deleted {
+.image-wrapper.deleted {
 	position:relative;
 }
 
-.image-container.deleted::after {
+.image-wrapper.deleted::after {
 	content: "×";
 	position:absolute;
 	left:0;

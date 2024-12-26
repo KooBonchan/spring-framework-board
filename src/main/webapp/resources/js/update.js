@@ -1,4 +1,4 @@
-document.querySelectorAll(".image-container").forEach((element) => {
+document.querySelectorAll(".image-wrapper").forEach((element) => {
   element.addEventListener("click",(e) => {
     element.classList.toggle("deleted");
   })
@@ -6,8 +6,8 @@ document.querySelectorAll(".image-container").forEach((element) => {
 
 function verifyUpdateFileCounts(){
   const form = document['form-write'];
-  const originalCount = document.querySelectorAll(".image-container").length;
-  const deletedCount = document.querySelectorAll(".image-container.deleted").length;
+  const originalCount = document.querySelectorAll(".image-wrapper").length;
+  const deletedCount = document.querySelectorAll(".image-wrapper.deleted").length;
   const totalFileCount = form.files.files.length + originalCount - deletedCount;
   console.log(originalCount, deletedCount. totalFileCount);
   if(totalFileCount > 5){
@@ -21,7 +21,7 @@ function appendImageUpdates() {
   const form = document['form-write'];
   form.querySelectorAll('input[name="deletedFiles"]')
     .forEach(input => input.remove());
-  document.querySelectorAll(".image-container").forEach((element) => {
+  document.querySelectorAll(".image-wrapper").forEach((element) => {
     if(element.classList.contains("deleted")){
       const input = document.createElement('input');
       input.type = 'hidden';

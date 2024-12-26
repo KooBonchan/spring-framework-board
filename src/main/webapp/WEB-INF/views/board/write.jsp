@@ -19,25 +19,46 @@ textarea{
 </style>
 </head>
 <body>
+<div class="wrapper">
 <%@include file="../includes/navbar.jsp" %>
-<h2>Write your document</h2>
-
+<div id="page-wrapper">
+<div class="row"><div class="col-lg-12"><div class="panel panel-default"><div class="panel-body">
+  <h2>Write New Document</h2>
   <form method="post" name="form-write" enctype="multipart/form-data">
-  <ul>
-    <li><input name="title" placeholder="Write Title" required /></li>
-    <li><input name="writer" placeholder="Writer Name"
-      autocomplete="username" required /></li>
-    <li><textarea name="content"
-        placeholder="Write your content" required></textarea></li>
-    <li><input type="file" name="files" multiple
+    <div class="form-group">
+	    <label for="title">Title</label>
+	    <input name="title" id="title" placeholder="Write Title"
+        class="form-control" required />
+	  </div>
+	  <div class="form-group">
+      <label for="writer">Writer</label>
+		  <input name="writer" id="writer" placeholder="Your Name"
+         class="form-control" autocomplete="username" required />
+	  </div>
+  
+    <div class="form-group">
+		  <label for="content">Content</label>
+		  <textarea name="content" id="content" 
+		    class="form-control" rows="5" required></textarea>
+		</div>
+    <input type="file" name="files" multiple
+          class="form-control-file"
           accept="image/jpeg,
                   image/png,
                   image/gif,
                   image/webp,
-                  image/svg+xml"></li>
-    <li><button type="button" name="submit-button" onclick="verify()">SUBMIT</button></li>
-  </ul>
+                  image/svg+xml">
+    <div class="d-flex justify-content-end">
+	    <button type="button" name="submit-button" onclick="verify()"
+	      class="btn btn-primary mt-2">
+	      SUBMIT
+	    </button>
+    </div>
   </form>
+
+</div></div></div></div>
+</div><!-- /.page-wrapper -->
+</div><!-- /.wrapper -->
   
 <%@include file="../includes/footer.jsp" %>
 <script src="/resources/js/fileupload.js"></script>

@@ -55,6 +55,7 @@
       LEFT OUTER JOIN boardImage i
       ON b.idx = i.boardIdx
     where b.idx = #{idx}
+    order by imageIdx
   </select>
   
   <!-- CREATE, UPDATE, DELETE -->

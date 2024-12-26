@@ -29,13 +29,14 @@
 	</div>
 	<p class="content"><c:out value='${board.content}' /></p>
 	<c:url var="baseUrl" value="/api/image/" />
+	<div id="image-container">
 	<c:forEach var="image" items="${board.images}">
 		<c:url var="pathUrl" value="${baseUrl}thumbnail/${image.filePath}/${image.realFileName}" />
 		<div class="image-wrapper">
 		 	 <img class="thumbnail" alt="attached images" src="${pathUrl}">
 		</div>
-	 
 	</c:forEach>
+	</div>
 	
 </section>
 

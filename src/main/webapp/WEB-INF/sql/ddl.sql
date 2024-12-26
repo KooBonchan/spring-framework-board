@@ -73,23 +73,6 @@ create table member(
  constraint pk_member primary key (idx)
 );
 
-insert into member (idx, username, password)
-values (seq_member.nextval, 'Fourplay',
-  'NathanEast');
-  -- NathanEast
-insert into member (idx, username, password)
-values (seq_member.nextval, 'TSQ',
-  '3910e27da414e42aca57df9f6390d5c7958a4bf98bbf48d387e02e2bfcbd3ffb');
-  -- SutohMitsuru
-insert into member (idx, username, password)
-values (seq_member.nextval, 'Casiopea',
-  'NaruseYoshihiro');
-  -- NaruseYoshihiro
-insert into member (idx, username, password)
-values (seq_member.nextval, 'Vincen Garcia',
-  'VincenGarcia');
-  -- VincenGarcia
-
 create table memberAuth (
   username varchar2(50) not null,
   auth varchar2(50) not null,
@@ -126,3 +109,4 @@ values (seq_board_image.nextval, 8, '8string.jpg', '8string_DOT_jpg', 'test');
 commit;
 
 
+select * from member;

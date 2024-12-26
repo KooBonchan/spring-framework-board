@@ -1,7 +1,15 @@
 @charset "UTF-8";
 
+#image-container{
+	display:flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+
 .image-wrapper{
-	padding:1px 0;
+	width: fit-content;
+	height: fit-content;
 	cursor: pointer;
 }
 

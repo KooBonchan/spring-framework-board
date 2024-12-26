@@ -23,5 +23,5 @@ writeForm.files.addEventListener('change',function (e) {
       return;
     }
   }
-  console.log(files);
+  fileVerified = true;
 });
