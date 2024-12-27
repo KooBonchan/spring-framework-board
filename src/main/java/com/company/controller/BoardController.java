@@ -17,6 +17,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,8 +78,11 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@GetMapping("write")
 	public void writeForm () {};
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@PostMapping({"", "write"})
 	public String write(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 		String message = "failed to write new document";
@@ -105,6 +109,7 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@GetMapping("update")
 	public String updateForm(Model model, @RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
 		BoardDTO boardDTO = boardService.get(idx);
@@ -115,6 +120,8 @@ public class BoardController {
 		redirectAttributes.addFlashAttribute("message", "document not found");
 		return "redirect:/board";
 	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@PostMapping("update")
 	public String update(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addAttribute("idx", boardDTO.getIdx());
@@ -155,6 +162,7 @@ public class BoardController {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@GetMapping("delete")
 	public String delete(@RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
 		List<ImageDTO> toBeDeleted = boardService.remove(idx);

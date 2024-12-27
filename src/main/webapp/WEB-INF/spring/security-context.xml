@@ -7,8 +7,7 @@
     
   <http>
     <form-login login-page="/login"/>
-    <remember-me data-source-ref="dataSource"
-      token-validity-seconds="604800"/> <!-- 7 days -->
+    <remember-me data-source-ref="dataSource" token-validity-seconds="604800"/> <!-- 7 days -->
   </http>
   
   <beans:bean
