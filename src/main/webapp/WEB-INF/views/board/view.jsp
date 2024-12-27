@@ -91,7 +91,6 @@ window.onload = () => {
 </script>
 <script src="/resources/js/imageview.js"></script>
 <script src="/resources/js/view.js"></script>
-<%@include file="../includes/login.jsp" %>
 <%@include file="../includes/footer.jsp" %>
 </body>
 </html>

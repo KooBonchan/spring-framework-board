@@ -1,9 +1,7 @@
 package com.company.mapper;
 
-import com.company.domain.MemberDTO;
+import com.company.domain.MemberVO;
 
 public interface MemberMapper {
-	MemberDTO login(MemberDTO memberDTO);
-	String checkUsername(String username);
-	int signup(MemberDTO memberDTO);
+	MemberVO read(String username);
 }

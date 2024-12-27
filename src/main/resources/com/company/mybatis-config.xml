@@ -6,7 +6,6 @@
       <typeAlias type="com.company.domain.BoardDTO" alias="Board"></typeAlias>
       <typeAlias type="com.company.domain.ImageDTO" alias="Image"></typeAlias>
       <typeAlias type="com.company.domain.ReplyDTO" alias="Reply"></typeAlias>
-      <typeAlias type="com.company.domain.MemberDTO" alias="Member"></typeAlias>
     </typeAliases>
     
 </configuration>

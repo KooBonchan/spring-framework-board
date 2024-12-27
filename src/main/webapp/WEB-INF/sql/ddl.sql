@@ -81,7 +81,7 @@ create table memberAuth (
     references member(username)
 );
 
-
+-- Spring Security Remember Me Default Proposal
 create table persistent_logins (
   username varchar2(64) not null,
   series varchar2(64) not null,

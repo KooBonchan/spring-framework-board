@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+  <http>
+    <form-login login-page="/login"/>
+    <remember-me data-source-ref="dataSource"
+      token-validity-seconds="604800"/> <!-- 7 days -->
+  </http>
+  
+  <beans:bean
+    class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"
+    id="BCryptPasswordEncoder">
+  </beans:bean>
+  <beans:bean
+    class="com.company.security.CustomUserDetailsService"
+    id="customUserDetailsService">
+  </beans:bean>
+  
+  <authentication-manager>
+    <authentication-provider user-service-ref="customUserDetailsService">
+      <password-encoder ref="BCryptPasswordEncoder"/>
+    </authentication-provider>
+  </authentication-manager>
+
+</beans:beans>

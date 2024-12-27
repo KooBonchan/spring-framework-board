@@ -38,7 +38,10 @@ public class ReplyApiController {
 	}
 	
 	@PostMapping(path = "{boardIdx}")
-	public ResponseEntity<Void> write(@RequestBody ReplyDTO replyDTO, @PathVariable long boardIdx, HttpSession session) {
+	public ResponseEntity<Void> write(
+			@RequestBody ReplyDTO replyDTO,
+			@PathVariable long boardIdx,
+			HttpSession session) {
 		Object writer = session.getAttribute("writer");
 		if(writer == null || ((String)writer).length() == 0) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		replyDTO.setWriter((String)writer);

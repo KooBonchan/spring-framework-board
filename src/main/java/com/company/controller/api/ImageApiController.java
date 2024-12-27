@@ -23,7 +23,6 @@ import lombok.extern.log4j.Log4j;
 public class ImageApiController {
 	private String basePath = "C:\\upload";
 	private String thumbnailFolder = "thumbnail";
-	
 	@GetMapping("thumbnail/{path}/{filename}")
 	public ResponseEntity<byte[]> getThumbnail(
 		@PathVariable("path") String path,

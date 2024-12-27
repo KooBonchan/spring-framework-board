@@ -2,11 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.company.mapper.MemberMapper">
-  <select id="login" parameterType="Member" resultType="Member">
-    select * from member
-    where username=#{username} and password=#{password}
+  <resultMap type="com.company.domain.MemberVO" id="Member">
+    <id property="idx" column="idx"/>
+    <result property="username" column="username"/>
+    <result property="password" column="password"/>
+    <result property="regDate" column="regDate"/>
+    <result property="enabled" column="enabled"/>
+    <collection property="auths" resultMap="Auth"/>
+  </resultMap>
+  <resultMap type="com.company.domain.AuthVO" id="Auth">
+    <result property="auth" column="auth"/>
+  </resultMap>
+
+  <select id="read" parameterType="String" resultMap="Member">
+    SELECT
+      m.idx, m.username, m.password, m.regDate, m.enabled,
+      a.auth
+    FROM member m
+      LEFT OUTER JOIN memberAuth a
+      ON m.username = a.username
+    WHERE m.username = #{username}
   </select>
-  <select id="checkUsername" parameterType="String" resultType="String">
+
+  
+  <!-- <select id="checkUsername" parameterType="String" resultType="String">
     select username from member where username=#{username}
   </select>
   
@@ -16,5 +35,5 @@
     </selectKey>
     insert into member (idx, username, password)
     values (#{idx}, #{username}, #{password})
-  </insert>
+  </insert> -->
 </mapper>
