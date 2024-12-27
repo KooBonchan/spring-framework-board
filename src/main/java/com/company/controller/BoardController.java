@@ -78,11 +78,11 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("write")
 	public void writeForm () {};
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping({"", "write"})
 	public String write(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 		String message = "failed to write new document";
@@ -109,7 +109,7 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
+	@PreAuthorize("principal.username == #boardDTO.writer")
 	@GetMapping("update")
 	public String updateForm(Model model, @RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
 		BoardDTO boardDTO = boardService.get(idx);
@@ -121,7 +121,7 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
+	@PreAuthorize("principal.username == #boardDTO.writer")
 	@PostMapping("update")
 	public String update(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addAttribute("idx", boardDTO.getIdx());
@@ -162,9 +162,12 @@ public class BoardController {
 		}
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
-	@GetMapping("delete")
-	public String delete(@RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
+	@PreAuthorize("principal.username == #writer")
+	@PostMapping("delete")
+	public String delete(
+			@RequestParam("idx") long idx,
+			RedirectAttributes redirectAttributes,
+			String writer) {
 		List<ImageDTO> toBeDeleted = boardService.remove(idx);
 		if(toBeDeleted != null) {
 			for(ImageDTO image : toBeDeleted) {

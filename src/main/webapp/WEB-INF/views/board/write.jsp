@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -32,8 +33,10 @@ textarea{
 	  </div>
 	  <div class="form-group">
       <label for="writer">Writer</label>
-		  <input name="writer" id="writer" placeholder="Your Name"
-         class="form-control" autocomplete="username" required />
+		  <input name="writer" id="writer" tabindex="-1"
+		    class="form-control"
+		    value='<sec:authentication property="principal.username"/>'
+		    readonly />
 	  </div>
   
     <div class="form-group">
@@ -54,6 +57,7 @@ textarea{
 	      SUBMIT
 	    </button>
     </div>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   </form>
 
 </div></div></div></div>
