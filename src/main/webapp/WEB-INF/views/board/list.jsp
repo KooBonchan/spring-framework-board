@@ -38,10 +38,18 @@
 				</div>
 			</div>
 		</form>
-		<button class="btn btn-primary" type="button"
-			onclick="location.href='/board/write'">Write new
-			document
-		</button>
+		<sec:authorize access="isAuthenticated()">
+			<button class="btn btn-primary" type="button"
+	      onclick="location.href='/board/write'">Write new
+	      document
+	    </button>
+		</sec:authorize>
+		<sec:authorize access="isAnonymous()">
+		  <div>
+		    <span>You need to login<br>to write new document</span>
+		  </div>
+		</sec:authorize>
+		
 	</div>
 
 	<!-- SEARCH QUERY -->

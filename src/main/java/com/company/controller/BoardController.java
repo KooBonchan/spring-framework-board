@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -109,15 +111,24 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	@PreAuthorize("principal.username == #boardDTO.writer")
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("update")
-	public String updateForm(Model model, @RequestParam("idx") long idx, RedirectAttributes redirectAttributes) {
+	public String updateForm(
+			Model model,
+			@RequestParam("idx") long idx,
+			RedirectAttributes redirectAttributes) {
 		BoardDTO boardDTO = boardService.get(idx);
 		if(boardDTO != null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if( ! boardDTO.getWriter().equals(auth.getName())) {
+				redirectAttributes.addFlashAttribute("message", "Invalid access");
+				redirectAttributes.addAttribute("idx", boardDTO.getIdx());
+				return "redirect:/board";
+			}
 			model.addAttribute("board", boardDTO);
 			return "board/update";
 		}
-		redirectAttributes.addFlashAttribute("message", "document not found");
+		redirectAttributes.addFlashAttribute("message", "Cannot find the document");
 		return "redirect:/board";
 	}
 	
@@ -165,9 +176,10 @@ public class BoardController {
 	@PreAuthorize("principal.username == #writer")
 	@PostMapping("delete")
 	public String delete(
-			@RequestParam("idx") long idx,
-			RedirectAttributes redirectAttributes,
-			String writer) {
+		long idx,
+		String writer,
+		RedirectAttributes redirectAttributes
+	) {
 		List<ImageDTO> toBeDeleted = boardService.remove(idx);
 		if(toBeDeleted != null) {
 			for(ImageDTO image : toBeDeleted) {

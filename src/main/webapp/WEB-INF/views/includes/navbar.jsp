@@ -1,18 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!-- Bootstrap insert -->
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" style="margin-bottom: 0">
 	<a class="navbar-brand" href="/board"><strong>LOGO</strong></a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarNav">
-		<ul class="navbar-nav">
-			<li class="nav-item active"><a class="nav-link" href="/board">Home</a></li>
-			<li class="nav-item"><a class="nav-link" href="/">Features</a></li>
-			<li class="nav-item"><a class="nav-link" href="/">Pricing</a></li>
-		</ul>
-	</div>
+	<sec:authorize access="isAnonymous()">
+		<button type="button" class="btn btn-primary mt-2"
+		  onclick="location.href='/login'">
+      Log In
+		</button>
+	</sec:authorize>
+	<sec:authorize access="isAuthenticated()">
+	<form action="/logout" method="post">
+    <button class="btn mt-2">
+      Logout
+    </button>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	</form>
+  </sec:authorize>
 </nav>
 <!-- ------------- -->

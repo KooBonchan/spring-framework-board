@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +46,8 @@ public class ReplyApiController {
 			@RequestBody ReplyDTO replyDTO,
 			@PathVariable long boardIdx,
 			HttpSession session) {
-		Object writer = session.getAttribute("writer");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object writer = auth.getName();;
 		if(writer == null || ((String)writer).length() == 0) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		replyDTO.setWriter((String)writer);
 		replyDTO.setBoardIdx(boardIdx);
@@ -59,10 +62,15 @@ public class ReplyApiController {
 	public ResponseEntity<Void> delete(
 			@PathVariable(name = "boardIdx") long boardIdx,
 			@PathVariable(name = "idx") long idx) {
-		if(replyService.delete(boardIdx, idx)) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ReplyDTO replyDTO = new ReplyDTO();
+		replyDTO.setBoardIdx(boardIdx);
+		replyDTO.setIdx(idx);
+		replyDTO.setWriter(auth.getName());
+		if(replyService.delete(replyDTO)) {
 			return ResponseEntity.ok(null);
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
 	
 }

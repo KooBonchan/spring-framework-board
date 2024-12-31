@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-  xmlns:beans="http://www.springframework.org/schema/beans"
+<beans
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    
-  <http>
-    <form-login login-page="/login"/>
-    <remember-me data-source-ref="dataSource" token-validity-seconds="604800"/> <!-- 7 days -->
-  </http>
-  
-  <beans:bean
+
+  <security:http>
+    <security:form-login login-page="/login" default-target-url="/board"/>
+    <security:logout logout-url="/logout"
+      delete-cookies="remember-me,JSESSION_ID"
+      logout-success-url="/board" />
+    <security:remember-me data-source-ref="dataSource"
+      token-validity-seconds="604800" /> <!-- 7 days -->
+  </security:http>
+
+  <bean
     class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"
     id="BCryptPasswordEncoder">
-  </beans:bean>
-  <beans:bean
+  </bean>
+  <bean
     class="com.company.security.CustomUserDetailsService"
     id="customUserDetailsService">
-  </beans:bean>
-  
-  <authentication-manager>
-    <authentication-provider user-service-ref="customUserDetailsService">
-      <password-encoder ref="BCryptPasswordEncoder"/>
-    </authentication-provider>
-  </authentication-manager>
+  </bean>
 
-</beans:beans>
+
+  <bean id="customAuthenticationProvider"
+    class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <property name="userDetailsService" ref="customUserDetailsService"></property>
+    <property name="passwordEncoder" ref="BCryptPasswordEncoder"></property>
+  </bean>
+  <bean id="authenticationManager"
+    class="org.springframework.security.authentication.ProviderManager">
+    <constructor-arg>
+      <list>
+        <ref bean="customAuthenticationProvider" />
+      </list>
+    </constructor-arg>
+  </bean>
+
+</beans>

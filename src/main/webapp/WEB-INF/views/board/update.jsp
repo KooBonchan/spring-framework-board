@@ -42,6 +42,7 @@ textarea{
       <input
         value=<c:out value="${board.writer}" />
         disabled />
+      <input name="writer" type="hidden" value=<c:out value="${board.writer}" /> />
     </div>
     <div class="form-group">
       <label for="content">Content</label>
@@ -76,6 +77,7 @@ textarea{
         SUBMIT
       </button>
     </div>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	</form>
 </div></div></div></div><!-- END PAGE -->
 </div><!-- /.page-wrapper -->

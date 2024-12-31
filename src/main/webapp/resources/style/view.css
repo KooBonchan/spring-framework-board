@@ -75,3 +75,13 @@ button.delete {
 button.delete:hover {
   background-color: #c82333;
 }
+
+.btn-writer-only{
+	padding: 0;
+	margin-right: 1em;
+	color:#333;
+	font-size:0.8rem;
+}
+.btn-writer-only:hover{
+	text-decoration: underline;
+}

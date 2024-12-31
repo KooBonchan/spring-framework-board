@@ -25,6 +25,15 @@
   <logger name="jdbc.resultset">
     <level value="warn" />
   </logger>
+  
+  <!-- Transactional -->
+  <logger name="org.springframework.transaction">
+    <level value="debug" />
+  </logger>
+  
+  <logger name="org.apache.ibatis">
+    <level value="debug" />
+  </logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">

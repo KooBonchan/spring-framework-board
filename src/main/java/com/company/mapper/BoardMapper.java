@@ -26,6 +26,9 @@ public interface BoardMapper {
 	int write(BoardDTO boardDTO);
 	int update(BoardDTO boardDTO);
 	int updateImageCount(BoardDTO boardDTO);
-	int updateReply(long idx);
+	int updateReply(
+		@Param("idx") long idx,
+		@Param("increment") boolean increment
+	);
 	int delete(long idx);
 }

@@ -78,8 +78,9 @@ create table memberAuth (
   auth varchar2(50) not null,
   primary key (username, auth),
   constraint fk_member_auth foreign key(username)
-    references member(username)
+    references member(username) on delete cascade
 );
+
 
 -- Spring Security Remember Me Default Proposal
 create table persistent_logins (
@@ -107,6 +108,7 @@ insert into boardImage (idx, boardIdx, originalFileName, realFileName, filePath)
 values (seq_board_image.nextval, 8, '8string.jpg', '8string_DOT_jpg', 'test');
 
 commit;
-
-
 select * from member;
+SELECT * FROM memberAuth;
+delete from memberAuth where username like 'TESTER%';
+delete from member where username like 'TESTER%';

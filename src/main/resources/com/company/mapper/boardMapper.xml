@@ -76,7 +76,12 @@
   </update>
   <update id="updateReply" parameterType="long">
     UPDATE board SET
+    <if test="increment">
     replyCount = replyCount + 1
+    </if>
+    <if test="!increment">
+    replyCount = replyCount - 1
+    </if>
     WHERE idx = #{idx}
   </update>
   <delete id="delete" parameterType="long">

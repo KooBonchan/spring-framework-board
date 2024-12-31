@@ -17,7 +17,9 @@
   </insert>
   <delete id="delete" parameterType="Reply">
     DELETE FROM reply
-    WHERE boardIdx = #{boardIdx} and idx = #{idx}
+    WHERE boardIdx = #{boardIdx}
+      and idx = #{idx}
+      and writer = #{writer}
   </delete>
   
 

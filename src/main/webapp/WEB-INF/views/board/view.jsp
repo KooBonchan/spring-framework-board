@@ -24,12 +24,21 @@
 			<span>Updated: <fmt:formatDate value="${board.regDate}" pattern="yy.MM.dd."/></span>
 		</c:if>
 	</div>
-	<sec:authentication property="principal.username" var="username"/>
+	
 	<sec:authorize access="hasAnyRole('ROLE_MEMBER', 'ROLE_ADMIN')">
+	<sec:authentication property="principal.username" var="username"/>
 	<c:if test="${username eq board.writer }">
-		<div class="modify-links">
-	    <a href="/board/update?idx=<c:out value="${board.idx}"/>">Update</a>
-	    <a href="/board/delete?idx=<c:out value="${board.idx}"/>">Delete</a>
+		<div class="modify-links d-flex justify-left">
+	    <form action="/board/update" method="get">
+        <input type="hidden" name="idx" value="<c:out value="${board.idx}"/>" />
+        <button class="btn btn-default btn-writer-only">Update</button>
+      </form>
+	    <form action="/board/delete" method="post">
+	      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	      <input type="hidden" name="idx" value="<c:out value="${board.idx}"/>" />
+	      <input type="hidden" name="writer" value="${username}" />
+	      <button class="btn btn-default btn-writer-only">Delete</button>
+	    </form>
 	  </div>
   </c:if>
 	</sec:authorize>
@@ -51,18 +60,16 @@
 	
 	<sec:authorize access="hasAnyRole('ROLE_MEMBER', 'ROLE_ADMIN')">
     <form name="form-reply" id="form-reply" onsubmit="return false;" class="row">
-      <div class="col-12 mb-1">
-        <span id="writer"> Writer: <sec:authentication property="principal.username"/> </span>
-        <button type="button" class="btn btn-default" id="btn-logout" style="color:#999">
-          Logout
-        </button>
-        </div>
-        <div class="col-9">
-            <textarea name="content" id="content" class="form-control" rows="4" placeholder="Content" required></textarea>
-        </div>
-        <div class="col-3">
-            <button type="button" class="btn btn-primary w-100" onclick="submitReply(<c:out value="${board.idx}"/>)">Reply</button>
-        </div>
+      <div class="col-12 mb-1 mt-3">
+        <span id="writer">Leave your comments, <sec:authentication property="principal.username"/></span>
+      </div>
+      <div class="col-9">
+          <textarea name="content" id="content" class="form-control" rows="4" placeholder="Comment" required></textarea>
+      </div>
+      <div class="col-3">
+          <button type="button" class="btn btn-primary w-100" onclick="submitReply(<c:out value="${board.idx}"/>)">Reply</button>
+      </div>
+      <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 	</sec:authorize>
 	<sec:authorize access="isAnonymous()">
@@ -96,6 +103,9 @@
 window.onload = () => {
 	loadReplies(<c:out value="${board.idx}"/>);
 }
+const csrfHeaderName = "${_csrf.headerName}";
+const csrfTokenValue = "${_csrf.token}";
+const myname = "${username}";
 </script>
 <script src="/resources/js/imageview.js"></script>
 <script src="/resources/js/view.js"></script>

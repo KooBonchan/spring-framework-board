@@ -29,20 +29,19 @@ public class ReplyServiceImpl implements ReplyService {
 		if(replyDTO == null) return false;
 		long boardIdx = replyDTO.getBoardIdx();
 		if(replyMapper.write(replyDTO) > 0) {
-			if(boardMapper.updateReply(boardIdx) > 0) {
+			if(boardMapper.updateReply(boardIdx, true) > 0) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public boolean delete(long boardIdx, long idx) {
-		ReplyDTO replyDTO = new ReplyDTO();
-		replyDTO.setBoardIdx(boardIdx);
-		replyDTO.setIdx(idx);
-		return delete(replyDTO);
-	}
 	public boolean delete(ReplyDTO replyDTO) {
-		return replyMapper.delete(replyDTO) > 0;
+		if(replyMapper.delete(replyDTO) > 0) {
+			if(boardMapper.updateReply(replyDTO.getBoardIdx(), false) > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

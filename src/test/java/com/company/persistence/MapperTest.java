@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.company.domain.BoardDTO;
 import com.company.domain.ImageDTO;
@@ -22,7 +23,11 @@ import com.company.mapper.ReplyMapper;
 import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src\\main\\webapp\\WEB-INF\\spring\\root-context.xml")
+@ContextConfiguration({
+	"file:src\\main\\webapp\\WEB-INF\\spring\\root-context.xml",
+	"file:src\\main\\webapp\\WEB-INF\\spring\\security-context.xml"
+})
+@Transactional
 @Log4j
 public class MapperTest {
 	@Autowired
@@ -80,7 +85,7 @@ public class MapperTest {
 			testReply.setBoardIdx(boardIdx);
 			replyMapper.write(testReply);
 			assertTrue(testReply.getIdx() > 0);
-			assertTrue(boardMapper.updateReply(boardIdx) > 0);
+			assertTrue(boardMapper.updateReply(boardIdx, true) > 0);
 			
 			boardMapper.delete(testBoard.getIdx());
 		} catch (Exception e) {

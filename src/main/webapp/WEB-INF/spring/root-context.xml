@@ -26,6 +26,7 @@
     <property name="jdbcUrl" value="${jdbc.url}"></property>
     <property name="username" value="${jdbc.username}"></property>
     <property name="password" value="${jdbc.password}"></property>
+    <property name="connectionTimeout" value="10000"></property>
   </bean>
   <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
     <constructor-arg ref="hikariConfig"></constructor-arg>
@@ -43,6 +44,20 @@
   <mybatis-spring:scan base-package="com.company.mapper"/>
   
   
+  <!-- Transaction -->
+  <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+    id="transactionManager">
+    <property name="dataSource" ref="dataSource"></property>
+  </bean>
+  <tx:annotation-driven />
+  
+  <!-- AOP -->
+  <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+  <context:component-scan base-package="com.company.aop"></context:component-scan>
+  <context:component-scan base-package="com.company.service"></context:component-scan>
+  <context:component-scan base-package="com.company.security"></context:component-scan>
+  <context:component-scan base-package="com.company.config" />
+  
   <!-- Board Config Beans -->
   <bean class="java.util.HashSet" id="categorySet">
     <constructor-arg><list>
@@ -50,13 +65,6 @@
        <value>content</value>
        <value>writer</value>
     </list></constructor-arg>
-  </bean>
+  </bean>  
   
-  <!-- AOP -->
-  <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
-  <context:component-scan base-package="com.company.aop"></context:component-scan>
-  <context:component-scan base-package="com.company.service"></context:component-scan>
-  <context:component-scan base-package="com.company.config" />
-  
-  <tx:annotation-driven/>
 </beans>

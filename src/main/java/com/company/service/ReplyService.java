@@ -8,6 +8,5 @@ public interface ReplyService {
 	List<ReplyDTO> findAll(long boardIdx);
 	
 	boolean write(ReplyDTO replyDTO);
-	boolean delete(long boardIdx, long idx);
 	boolean delete(ReplyDTO replyDTO);
 }

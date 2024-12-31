@@ -11,6 +11,7 @@
     <collection property="auths" resultMap="Auth"/>
   </resultMap>
   <resultMap type="com.company.domain.AuthVO" id="Auth">
+    <result property="username" column="username"/>
     <result property="auth" column="auth"/>
   </resultMap>
 
@@ -25,6 +26,17 @@
   </select>
 
   
+  <insert id="signup" parameterType="com.company.domain.MemberVO">
+    <selectKey keyProperty="idx" order="BEFORE" resultType="long">
+      select seq_member.nextval from dual 
+    </selectKey>
+    INSERT INTO member(idx, username, password)
+    VALUES (#{idx}, #{username}, #{password})
+  </insert>
+  <insert id="grantMember" parameterType="string">
+    INSERT INTO memberAuth(username, auth)
+    VALUES (#{username}, 'ROLE_MEMBER')
+  </insert>
   <!-- <select id="checkUsername" parameterType="String" resultType="String">
     select username from member where username=#{username}
   </select>

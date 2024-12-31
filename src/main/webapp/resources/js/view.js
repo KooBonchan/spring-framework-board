@@ -10,10 +10,14 @@ function loadReplies(idx){
     }
     else {
       for(let json of jsons){
+        const writer = escapeHTML(json['writer']);
+        const content = escapeHTML(json['content']);
+        const deleteButton = "<td><button type='button' class='delete' onclick='deleteReply("+Number(idx)+','+Number(json['idx'])+")'>X</button></td>" 
+        
         inner = inner +
-          "<tr><td class='writer'>" + escapeHTML(json['writer']) + "</td>" +
-          "<td class='content'>" + escapeHTML(json['content']) + "</td>" +
-          "<td><button type='button' class='delete' onclick='deleteReply("+Number(idx)+','+Number(json['idx'])+")'>X</button></td>" +
+          "<tr><td class='writer'>" + writer + "</td>" +
+          "<td class='content'>" + content + "</td>" +
+           ((myname && myname === writer)? deleteButton : '' )+
           "</tr>";
       } 
     }
@@ -21,16 +25,19 @@ function loadReplies(idx){
     replyContainer.innerHTML = inner;
   });
 }
+let replyHeaders = {
+  'Content-Type': 'application/json',
+};
+
 function submitReply(idx){
+  replyHeaders[csrfHeaderName] =csrfTokenValue;
   const data = {
     content: escapeHTML(formReply.content.value),
   }
   fetch("/api/board/" + idx, {
     method: "POST",
-    headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+    headers: replyHeaders,
+    body: JSON.stringify(data),
   })
   .then(response => {
     formReply.content.value = "";
@@ -42,14 +49,16 @@ function submitReply(idx){
   .catch(console.log)
 }
 function deleteReply(boardIdx, idx){
+  replyHeaders[csrfHeaderName] =csrfTokenValue; 
   fetch("/api/board/" + boardIdx + "/" + idx, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: replyHeaders,
   })
   .then(response => {
     if(response.ok){
       loadReplies(boardIdx);
     } else {
-      $("#modal-body").html('Cannot delete the comment.');
+      $("#modal-body").html('Cannot delete this comment.');
         $("#modal").modal('show');
     }
   })

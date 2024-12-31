@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import com.company.domain.AuthVO;
 import com.company.domain.MemberVO;
 
 import lombok.Getter;
@@ -24,7 +25,8 @@ public class CustomUser extends User{
 		super(member.getUsername(), member.getPassword(),
 			member.isEnabled(), true, true, true,
 			member.getAuths().stream()
-			.map(auth -> new SimpleGrantedAuthority(auth.getAuth()))
+			.map(AuthVO::getAuth)
+			.map(SimpleGrantedAuthority::new)
 			.collect(Collectors.toList()));
 		this.member = member;
 	}

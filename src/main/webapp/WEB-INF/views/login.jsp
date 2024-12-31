@@ -14,23 +14,24 @@
 
 <body>
 <div class="container mt-3">
-  <form role="form" method="post" action="/login" name="form-login">
+  <form role="form" method="post"
+    action="/login" name="form-login" novalidate class="needs-validation">
     <div class="form-group">
       <label for="username">ID</label>
       <input name="username" id="username"
         class="form-control"
         autocomplete="username"
-        autofocus required/>
-      <small
-        class="invalid-feedback">
-        Your personal information is our product.
+        pattern="^[a-zA-Z0-9가-힣_-]{3,}$"
+        autofocus/>
+      <small class="invalid-feedback">
+        
       </small>
     </div>
     <div class="form-group">
       <label for="password">Password</label>
       <input type="password" name="password" id="password"
         class="form-control"
-        required/>
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&+#^=~_|:;,])[A-Za-z\d@$!%*?&+#^=~_|:;,]{8,20}$"/>
     </div>
     <div>
       <input type="checkbox" name="remember-me" id="remember-me"/>
@@ -43,6 +44,10 @@
       class="btn btn-primary mt-3">
       Login
     </button>
+    <button type="button" id="btn-signup"
+      class="btn btn-secondary mt-3">
+      Sign Up
+    </button>
   </form>
 </div>
 <script>
@@ -51,6 +56,15 @@ window.onload = () => {
 	document.getElementById("btn-login").addEventListener("click", (e) => {
 		e.preventDefault();
 		formLogin.submit();
+	})
+	document.getElementById("btn-signup")?.addEventListener("click", (e) => {
+	  e.preventDefault();
+	  formLogin.setAttribute("action", "signup");
+	  if (formLogin.checkValidity()) {
+	    formLogin.submit();
+	    return;
+	  }
+	  formLogin.classList.add('was-validated');
 	})
 }
 </script>

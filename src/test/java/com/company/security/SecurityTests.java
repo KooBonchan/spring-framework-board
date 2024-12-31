@@ -1,17 +1,21 @@
 package com.company.security;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.company.domain.MemberVO;
 import com.company.mapper.MemberMapper;
+import com.company.service.AuthServiceImpl;
 
 import lombok.extern.log4j.Log4j;
 
@@ -22,17 +26,39 @@ import lombok.extern.log4j.Log4j;
 })
 @Log4j
 public class SecurityTests {
-	@Autowired
-	private MemberMapper mapper;
+	@Mock
+	private MemberMapper memberMapper;
+	@Mock 
+	private PasswordEncoder encoder;
+	@InjectMocks
+	private AuthServiceImpl authService;
 	
-	private String testId;
+	private MemberVO testMember;
 	{
-		testId = "DEVDEV";
+		testMember = new MemberVO();
+		testMember.setUsername("TESTER1191");
+		testMember.setPassword("TOTALLYunencodedPW1!");
 	}
+	
+	@Before
+	public void mockSetup() {
+		MockitoAnnotations.initMocks(this);
+	}
+	
 	@Test
-	public void testAuth() {
-		MemberVO member = mapper.read(testId);
-		assertNotNull(member);
-		assertTrue(member.getAuths().size() > 0);
+	public void testSignupService() {
+		when(memberMapper.signup(testMember)).thenReturn(1);
+		when(memberMapper.grantMember(testMember.getUsername())).thenReturn(1);
+		when(encoder.encode(testMember.getPassword())).thenReturn("ENCODED");
+		try{
+			authService.signup(testMember);
+		}catch(Exception e){
+			fail(e.getMessage());
+		}
+		
+		
+		
 	}
+	
+	
 }

@@ -2,8 +2,7 @@ package com.company.service;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -22,7 +21,10 @@ import com.company.mapper.ReplyMapper;
 import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src\\main\\webapp\\WEB-INF\\spring\\root-context.xml")
+@ContextConfiguration({
+	"file:src\\main\\webapp\\WEB-INF\\spring\\root-context.xml",
+	"file:src\\main\\webapp\\WEB-INF\\spring\\security-context.xml"
+})
 @Log4j
 public class ReplyServiceTest {
 	@Mock
@@ -60,13 +62,13 @@ public class ReplyServiceTest {
 					reply.getContent() != null && 
 					reply.getBoardIdx() > 0 )))
 			.thenReturn(1);
-		when(boardMapper.updateReply(anyLong())).thenReturn(1);
+		when(boardMapper.updateReply(anyLong(), anyBoolean())).thenReturn(1);
 
 		
 		assertFalse(service.write(null));
 		assertFalse(service.write(new ReplyDTO()));
 		log.info(testReply);
-		log.info(boardMapper.updateReply(2));
+		log.info(boardMapper.updateReply(2, true));
 		assertTrue(service.write(testReply));
 	}
 }
