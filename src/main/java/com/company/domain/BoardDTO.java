@@ -23,7 +23,7 @@ public class BoardDTO {
 	private int replyCount;
 	private int imageCount;
 	
-	private MultipartFile[] files;
-	private long[] deletedFiles;
+	private List<MultipartFile> files;
+	private List<Long> deletedFiles;
 	private List<ImageDTO> images;
 }

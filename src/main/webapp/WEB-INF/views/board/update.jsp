@@ -6,6 +6,7 @@
 <head>
 <%@include file="../includes/header.jsp" %>
 <title>Write your Document</title>
+<meta name="csrf-token" content="${_csrf.token}" />
 <style>
 input, textarea{
 	width:200px;
@@ -72,12 +73,11 @@ textarea{
                  image/webp,
                  image/svg+xml">
     <div class="d-flex justify-content-end">
-      <button type="button" onclick="verify()"
+      <button type="button" onclick="submitForm()"
         class="btn btn-primary mt-2">
         SUBMIT
       </button>
     </div>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	</form>
 </div></div></div></div><!-- END PAGE -->
 </div><!-- /.page-wrapper -->
@@ -87,11 +87,50 @@ textarea{
 <script src="/resources/js/fileupload.js"></script>
 <script src="/resources/js/update.js"></script>
 <script>
-function verify() {
-  if(fileVerified && verifyUpdateFileCounts()){
-	  appendImageUpdates();
-	  writeForm.submit();
+function submitForm() {
+  if( ! (fileVerified && verifyUpdateFileCounts())){ return false; }
+  const writeForm = document['form-write'];
+  if( writeForm.title.value.trim().length == 0) return false;
+  if( writeForm.content.value.trim().length == 0) return false;
+  
+  let formData = new FormData();
+  formData.append("title", writeForm.title.value);
+  formData.append("writer", writeForm.writer.value);
+  formData.append("content", writeForm.content.value);
+  const files = writeForm.files.files;
+  for(const file of files){
+	  formData.append("files", file)
   }
+  document.querySelectorAll(".image-wrapper").forEach((element) => {
+    if(element.classList.contains("deleted")){
+      formData.append("deletedFiles", element.dataset.imageIdx || '');
+    }
+  })
+  
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+  let headers = new Headers();
+  headers.append('X-CSRF-TOKEN', csrfToken);
+  const urlParams = new URLSearchParams(window.location.search);
+  const idx = urlParams.get("idx");
+  
+  fetch('/api/board/'+idx, {
+      method: 'PUT',
+      body: formData,
+      headers: headers
+  })
+  .then(response => {
+    if(!response.ok) throw new Error();
+    if(idx){
+    	location.href='/board?idx='+idx;	
+    } else{
+    	location.href="/board"
+    }
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      alert("Unexpected error occurred while uploading your file");
+  });
+  
 }
 </script>
 </body>

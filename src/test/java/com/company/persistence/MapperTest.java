@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -115,7 +116,8 @@ public class MapperTest {
 	@Test
 	public void testBoardImage() {
 		try {
-			long[] idxs =  {27L}; //TODO: fix idxs after board reset
+			List<Long> idxs = new ArrayList<Long>(); //TODO: fix idxs after board reset
+			idxs.add(27L);
 			List<ImageDTO> result = imageMapper.findManyByIdx(8L, idxs);
 			assertNotNull(result);
 			

@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!-- Bootstrap insert -->
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" style="margin-bottom: 0">
+<nav class="navbar navbar-light bg-light" role="navigation" style="margin-bottom: 0">
 	<a class="navbar-brand" href="/board"><strong>LOGO</strong></a>
 	<sec:authorize access="isAnonymous()">
 		<button type="button" class="btn btn-primary mt-2"

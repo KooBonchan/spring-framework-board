@@ -6,6 +6,7 @@
 <head>
 <%@include file="../includes/header.jsp" %>
 <title>Write your Document</title>
+<meta name="csrf-token" content="${_csrf.token}" />
 <style>
 input, textarea{
 	width:200px;
@@ -25,8 +26,8 @@ textarea{
 <div id="page-wrapper">
 <div class="row"><div class="col-lg-12"><div class="panel panel-default"><div class="panel-body">
   <h2>Write New Document</h2>
-  <form method="post" name="form-write" enctype="multipart/form-data">
-    <div class="form-group">
+  <form action="/board" method="post" name="form-write" enctype="multipart/form-data">
+  	<div class="form-group">
 	    <label for="title">Title</label>
 	    <input name="title" id="title" placeholder="Write Title"
         class="form-control" required />
@@ -52,12 +53,11 @@ textarea{
                   image/webp,
                   image/svg+xml">
     <div class="d-flex justify-content-end">
-	    <button type="button" name="submit-button" onclick="verify()"
+	    <button type="button" name="submit-button" onclick="submitForm()"
 	      class="btn btn-primary mt-2">
 	      SUBMIT
 	    </button>
     </div>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   </form>
 
 </div></div></div></div>
@@ -67,8 +67,39 @@ textarea{
 <%@include file="../includes/footer.jsp" %>
 <script src="/resources/js/fileupload.js"></script>
 <script>
-function verify() {
-  if(fileVerified) writeForm.submit();
+function submitForm() {
+  if( ! fileVerified) return false;
+  const writeForm = document['form-write'];
+  if( writeForm.title.value.trim().length == 0) return false;
+  if( writeForm.content.value.trim().length == 0) return false;
+  
+  
+  let formData = new FormData();
+  formData.append("title", writeForm.title.value);
+  formData.append("content", writeForm.content.value);
+  const files = writeForm.files.files;
+  for(const file of files){
+	  formData.append("files", file)
+  }
+  
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+  let headers = new Headers();
+  headers.append('X-CSRF-TOKEN', csrfToken);
+  
+  fetch('/api/board', {
+	    method: 'POST',
+	    body: formData,
+	    headers: headers
+	})
+	.then(response => {
+		if(!response.ok) throw new Error();
+		return response.text();
+	})
+	.then(page => {location.href='/board?idx='+page})
+	.catch(error => {
+	    console.error('Error:', error);
+	    alert("Unexpected error occurred while uploading your file");
+	});
 }
 </script>
 </body>

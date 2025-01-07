@@ -62,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 		int addedImages = boardDTO.getImages().size();
 		int deletedImages = 0;
 		if(boardDTO.getDeletedFiles() != null) {
-			deletedImages = boardDTO.getDeletedFiles().length;
+			deletedImages = boardDTO.getDeletedFiles().size();
 		}
 		boardDTO.setImageCount(addedImages - deletedImages); // delta
 		boardResult = boardMapper.update(boardDTO);

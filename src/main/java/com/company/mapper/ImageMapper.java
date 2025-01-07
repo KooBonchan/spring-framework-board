@@ -9,7 +9,7 @@ import com.company.domain.ImageDTO;
 public interface ImageMapper {
 	List<ImageDTO> findManyByIdx(
 		@Param("boardIdx") long boardIdx,
-		@Param("idxs") long[] idxs
+		@Param("idxs") List<Long> idxs
 	);
 	
 	int upload(ImageDTO imageDTO);
@@ -17,7 +17,7 @@ public interface ImageMapper {
 	int deleteAll(long boardIdx);
 	int deleteManyByIdx(
 		@Param("boardIdx") long boardIdx,
-		@Param("idxs") long[] idxs
+		@Param("idxs") List<Long> idxs
 	);
 	
 }

@@ -55,9 +55,6 @@ public class SecurityTests {
 		}catch(Exception e){
 			fail(e.getMessage());
 		}
-		
-		
-		
 	}
 	
 	
