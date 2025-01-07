@@ -7,12 +7,12 @@
 	<a class="navbar-brand" href="/board"><strong>LOGO</strong></a>
 	<sec:authorize access="isAnonymous()">
 		<button type="button" class="btn btn-primary mt-2"
-		  onclick="location.href='/login'">
+		  onclick="location.href='/board/login'">
       Log In
 		</button>
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
-	<form action="/logout" method="post">
+	<form action="/board/logout" method="post">
     <button class="btn mt-2">
       Logout
     </button>

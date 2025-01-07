@@ -2,7 +2,6 @@ package com.company.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,9 +26,6 @@ public class HomeController {
 	@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
 	
-	@GetMapping("")
-	public String home() { return "home"; }
-	
 	@PostMapping("signup")
 	public String signup(MemberVO memberVO, Model model, RedirectAttributes rttr) {
 		try {
@@ -46,7 +42,7 @@ public class HomeController {
 			Authentication auth = new UsernamePasswordAuthenticationToken(memberVO.getUsername(), memberVO.getPassword());
 			Authentication authenticated = authenticationManager.authenticate(auth);
 			SecurityContextHolder.getContext().setAuthentication(authenticated);
-			return "redirect:/board";
+			return "redirect:/";
 		} catch (Exception e) {
 			log.error("Error occurred while auto login");
 			rttr.addAttribute("error", "");
@@ -57,12 +53,5 @@ public class HomeController {
 	@GetMapping("login")
 	public void login () {}
 	@GetMapping("signup")
-	public String signup () {return "login";}
-	
-	@GetMapping("post-test")
-	public String postTest() {return "postTest";}
-	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
-	@PostMapping("post-test")
-	public String postTestSubmit() {log.warn("PostTest"); return "redirect:/post-test";}
+	public String signup () {return "login";}	
 }

@@ -29,7 +29,6 @@ import com.company.service.BoardService;
 import lombok.extern.log4j.Log4j;
 
 @Controller
-@RequestMapping("board")
 @Log4j
 public class BoardController {
 	private String basePath = "C:\\upload";
@@ -43,7 +42,7 @@ public class BoardController {
 		log.info("----Not existing uri: redirecting----");
 		log.info("Request URI: " + request.getRequestURI());
         log.info("Request Method: " + request.getMethod());
-		return "redirect:/board";
+		return "redirect:/";
 	}
 	
 	@GetMapping("")
@@ -57,7 +56,7 @@ public class BoardController {
 		var boards = boardService.getPage(pageDTO.getPage(), pageSize, category, query);
 		model.addAttribute("boards", boards);
 		model.addAttribute("pageInfo", pageDTO);
-		return "board/list";
+		return "list";
 	}
 	
 	@GetMapping(path = "", params = "idx")
@@ -65,10 +64,10 @@ public class BoardController {
 		BoardDTO boardDTO = boardService.get(idx);
 		if(boardDTO != null) {
 			model.addAttribute("board", boardDTO);
-			return "board/view";
+			return "view";
 		}
 		redirectAttributes.addFlashAttribute("message", "document not found");
-		return "redirect:/board";
+		return "redirect:/";
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
@@ -87,13 +86,13 @@ public class BoardController {
 			if( ! boardDTO.getWriter().equals(auth.getName())) {
 				redirectAttributes.addFlashAttribute("message", "Invalid access");
 				redirectAttributes.addAttribute("idx", boardDTO.getIdx());
-				return "redirect:/board";
+				return "redirect:/";
 			}
 			model.addAttribute("board", boardDTO);
-			return "board/update";
+			return "update";
 		}
 		redirectAttributes.addFlashAttribute("message", "Cannot find the document");
-		return "redirect:/board";
+		return "redirect:/";
 	}
 	
 	@PreAuthorize("principal.username == #writer")
@@ -112,12 +111,12 @@ public class BoardController {
 					log.error("Failed to delete image:" + image.getRealFileName());
 				} catch(Exception e) {
 					redirectAttributes.addFlashAttribute("message","Error occurred while deleting your document");
-					return "redirect:/board";
+					return "redirect:/";
 				}
 			}
 		}
 		redirectAttributes.addFlashAttribute("message","successfully deleted the document.");
-		return "redirect:/board";
+		return "redirect:/";
 	}
 	
 	private void deleteFile(ImageDTO imageDTO) throws IOException{

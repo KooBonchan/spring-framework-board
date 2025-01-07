@@ -7,15 +7,15 @@
 	<!-- Metadata -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-	<link rel="stylesheet" type="text/css" href="/resources/style/theme.css"/>
+	<link rel="stylesheet" type="text/css" href="/board/resources/style/theme.css"/>
 	
 	<title>Login</title>
 </head>
 
 <body>
 <div class="container mt-3">
-  <form role="form" method="post"
-    action="/login" name="form-login" novalidate class="needs-validation">
+  <form role="form" method="post" action="/board/login"
+    name="form-login" novalidate class="needs-validation">
     <div class="form-group">
       <label for="username">ID</label>
       <input name="username" id="username"

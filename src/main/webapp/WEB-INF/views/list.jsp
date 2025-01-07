@@ -4,13 +4,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<%@include file="../includes/header.jsp" %>
+<%@include file="./includes/header.jsp" %>
 <link rel="stylesheet" href="/resources/style/list.css">
 <title>Board List</title>
 </head>
 <body>
 <div class="wrapper">
-<%@include file="../includes/navbar.jsp" %>
+<%@include file="./includes/navbar.jsp" %>
 <div id="page-wrapper">
 <div class="row"><div class="col-lg-12"><div class="panel panel-default"><div class="panel-body">
 	<!-- PAGE SIZING -->
@@ -157,7 +157,7 @@
 </div><!-- /.page-wrapper -->
 </div><!-- /.wrapper -->
 
-<%@include file="../includes/footer.jsp" %>
+<%@include file="./includes/footer.jsp" %>
 </body>
 
 </html>

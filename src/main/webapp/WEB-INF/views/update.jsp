@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<%@include file="../includes/header.jsp" %>
+<%@include file="./includes/header.jsp" %>
 <title>Write your Document</title>
 <meta name="csrf-token" content="${_csrf.token}" />
 <style>
@@ -24,7 +24,7 @@ textarea{
 </head>
 <body>
 <div class="wrapper">
-<%@include file="../includes/navbar.jsp" %>
+<%@include file="./includes/navbar.jsp" %>
 <div id="page-wrapper">
 <div class="row"><div class="col-lg-12"><div class="panel panel-default"><div class="panel-body">
 
@@ -54,7 +54,7 @@ textarea{
     
   	<div>Click images to delete</div>
   	<div class="image-container">
-			<c:url var="baseUrl" value="/api/image/" />
+			<c:url var="baseUrl" value="/board/api/image/" />
 			<c:forEach items="${board.images }" var="image">
 			  <c:url var="pathUrl" value="${baseUrl}thumbnail/${image.filePath}/${image.realFileName}" />			  
 			  <div class="image-wrapper" style="display:inline-block;"
@@ -83,9 +83,9 @@ textarea{
 </div><!-- /.page-wrapper -->
 </div><!-- /.wrapper -->
 	
-<%@include file="../includes/footer.jsp" %>
-<script src="/resources/js/fileupload.js"></script>
-<script src="/resources/js/update.js"></script>
+<%@include file="./includes/footer.jsp" %>
+<script src="/board/resources/js/fileupload.js"></script>
+<script src="/board/resources/js/update.js"></script>
 <script>
 function submitForm() {
   if( ! (fileVerified && verifyUpdateFileCounts())){ return false; }
@@ -113,7 +113,7 @@ function submitForm() {
   const urlParams = new URLSearchParams(window.location.search);
   const idx = urlParams.get("idx");
   
-  fetch('/api/board/'+idx, {
+  fetch('/board/api/'+idx, {
       method: 'PUT',
       body: formData,
       headers: headers

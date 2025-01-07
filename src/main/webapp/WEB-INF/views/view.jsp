@@ -7,13 +7,13 @@
 <html lang="ko">
 <head>
 <title>Board View</title>
-<%@include file="../includes/header.jsp" %>
-<link rel="stylesheet" type="text/css" href="/resources/style/view.css">
-<link rel="stylesheet" type="text/css" href="/resources/style/imageview.css">
+<%@include file="./includes/header.jsp" %>
+<link rel="stylesheet" type="text/css" href="/board/resources/style/view.css">
+<link rel="stylesheet" type="text/css" href="/board/resources/style/imageview.css">
 </head>
 <body>
 <div class="wrapper">
-<%@include file="../includes/navbar.jsp" %>
+<%@include file="./includes/navbar.jsp" %>
 <div id="page-wrapper">
 <section class="container">
   <div class="title"><c:out value='${board.title }' /></div>
@@ -44,7 +44,7 @@
 	</sec:authorize>
 	
 	<p class="content"><c:out value='${board.content}' /></p>
-	<c:url var="baseUrl" value="/api/image/" />
+	<c:url var="baseUrl" value="/board/api/image/" />
 	<div id="image-container">
 	<c:forEach var="image" items="${board.images}">
 		<c:url var="pathUrl" value="${baseUrl}thumbnail/${image.filePath}/${image.realFileName}" />
@@ -109,6 +109,6 @@ const myname = "${username}";
 </script>
 <script src="/resources/js/imageview.js"></script>
 <script src="/resources/js/view.js"></script>
-<%@include file="../includes/footer.jsp" %>
+<%@include file="./includes/footer.jsp" %>
 </body>
 </html>

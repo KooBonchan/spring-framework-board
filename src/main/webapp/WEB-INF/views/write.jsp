@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<%@include file="../includes/header.jsp" %>
+<%@include file="./includes/header.jsp" %>
 <title>Write your Document</title>
 <meta name="csrf-token" content="${_csrf.token}" />
 <style>
@@ -22,7 +22,7 @@ textarea{
 </head>
 <body>
 <div class="wrapper">
-<%@include file="../includes/navbar.jsp" %>
+<%@include file="./includes/navbar.jsp" %>
 <div id="page-wrapper">
 <div class="row"><div class="col-lg-12"><div class="panel panel-default"><div class="panel-body">
   <h2>Write New Document</h2>
@@ -64,8 +64,8 @@ textarea{
 </div><!-- /.page-wrapper -->
 </div><!-- /.wrapper -->
   
-<%@include file="../includes/footer.jsp" %>
-<script src="/resources/js/fileupload.js"></script>
+<%@include file="./includes/footer.jsp" %>
+<script src="/board/resources/js/fileupload.js"></script>
 <script>
 function submitForm() {
   if( ! fileVerified) return false;
@@ -86,7 +86,7 @@ function submitForm() {
   let headers = new Headers();
   headers.append('X-CSRF-TOKEN', csrfToken);
   
-  fetch('/api/board', {
+  fetch('/board/api', {
 	    method: 'POST',
 	    body: formData,
 	    headers: headers

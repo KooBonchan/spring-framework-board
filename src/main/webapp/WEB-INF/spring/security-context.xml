@@ -7,8 +7,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <security:http>
-    <security:form-login login-page="/login" default-target-url="/board"/>
-    <security:logout logout-url="/logout"
+    <security:form-login login-page="/board/login" default-target-url="/board"/>
+    <security:logout logout-url="/board/logout"
       delete-cookies="remember-me,JSESSION_ID"
       logout-success-url="/board" />
     <security:remember-me data-source-ref="dataSource"

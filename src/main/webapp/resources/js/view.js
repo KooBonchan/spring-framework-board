@@ -1,7 +1,7 @@
 const replyContainer = document.getElementById("reply-container");
 const formReply = document['form-reply'];
 function loadReplies(idx){
-  fetch("/api/board/" + idx)
+  fetch("/board/api/" + idx)
   .then(response => response.json())
   .then(jsons => {
     let inner = "";
@@ -34,7 +34,7 @@ function submitReply(idx){
   const data = {
     content: escapeHTML(formReply.content.value),
   }
-  fetch("/api/board/" + idx, {
+  fetch("/board/api/" + idx, {
     method: "POST",
     headers: replyHeaders,
     body: JSON.stringify(data),
@@ -50,7 +50,7 @@ function submitReply(idx){
 }
 function deleteReply(boardIdx, idx){
   replyHeaders[csrfHeaderName] =csrfTokenValue; 
-  fetch("/api/board/" + boardIdx + "/" + idx, {
+  fetch("/board/api/" + boardIdx + "/" + idx, {
     method: "DELETE",
     headers: replyHeaders,
   })
