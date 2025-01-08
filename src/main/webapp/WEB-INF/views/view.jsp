@@ -8,8 +8,8 @@
 <head>
 <title>Board View</title>
 <%@include file="./includes/header.jsp" %>
-<link rel="stylesheet" type="text/css" href="/board/resources/style/view.css">
-<link rel="stylesheet" type="text/css" href="/board/resources/style/imageview.css">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/style/view.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/style/imageview.css" />">
 </head>
 <body>
 <div class="wrapper">
@@ -44,16 +44,15 @@
 	</sec:authorize>
 	
 	<p class="content"><c:out value='${board.content}' /></p>
-	<c:url var="baseUrl" value="/board/api/image/" />
-	<div id="image-container">
+	
+	<div>
 	<c:forEach var="image" items="${board.images}">
-		<c:url var="pathUrl" value="${baseUrl}thumbnail/${image.filePath}/${image.realFileName}" />
+		<c:url var="pathUrl" value="/api/image/thumbnail/${image.filePath}/${image.realFileName}" />
 		<div class="image-wrapper">
 		 	 <img class="thumbnail" alt="attached images" src="${pathUrl}">
 		</div>
 	</c:forEach>
 	</div>
-	
 </section>
 
 <section class="container">
@@ -107,8 +106,8 @@ const csrfHeaderName = "${_csrf.headerName}";
 const csrfTokenValue = "${_csrf.token}";
 const myname = "${username}";
 </script>
-<script src="/resources/js/imageview.js"></script>
-<script src="/resources/js/view.js"></script>
+<script src="<c:url value="/resources/js/imageview.js" />"></script>
+<script src="<c:url value="/resources/js/view.js" />"></script>
 <%@include file="./includes/footer.jsp" %>
 </body>
 </html>

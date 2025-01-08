@@ -6,9 +6,7 @@
 <head>
 	<!-- Metadata -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-	<link rel="stylesheet" type="text/css" href="/board/resources/style/theme.css"/>
-	
+	<%@include file="./includes/header.jsp" %>
 	<title>Login</title>
 </head>
 

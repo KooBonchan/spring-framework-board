@@ -19,8 +19,8 @@ textarea{
 	margin-top:3px;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="/resources/style/update.css">
-<link rel="stylesheet" type="text/css" href="/resources/style/write.css">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/style/update.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/style/write.css" />">
 </head>
 <body>
 <div class="wrapper">
@@ -84,8 +84,8 @@ textarea{
 </div><!-- /.wrapper -->
 	
 <%@include file="./includes/footer.jsp" %>
-<script src="/board/resources/js/fileupload.js"></script>
-<script src="/board/resources/js/update.js"></script>
+<script src="<c:url value="/resources/js/fileupload.js" />"></script>
+<script src="<c:url value="/resources/js/update.js" />"></script>
 <script>
 function submitForm() {
   if( ! (fileVerified && verifyUpdateFileCounts())){ return false; }

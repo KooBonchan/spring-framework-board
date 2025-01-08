@@ -5,7 +5,7 @@
 <html lang="ko">
 <head>
 <%@include file="./includes/header.jsp" %>
-<link rel="stylesheet" href="/resources/style/list.css">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/style/list.css" />">
 <title>Board List</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
 <div id="page-wrapper">
 <div class="row"><div class="col-lg-12"><div class="panel panel-default"><div class="panel-body">
 	<!-- PAGE SIZING -->
-	<c:url var="queryUrl" value="/board">
+	<c:url var="queryUrl" value="/">
 		<c:param name="category" value="${param.category}" />
 		<c:param name="query" value="${param.query}" />
 	</c:url>
@@ -54,7 +54,7 @@
 
 	<!-- SEARCH QUERY -->
 	<div class="mb-3">
-		<c:url var="pageSizeUrl" value="/board">
+		<c:url var="pageSizeUrl" value="/">
 			<c:param name="pageSize" value="${param.pageSize}" />
 		</c:url>
 		<form role="form" class="form-inline" action="${pageSizeUrl }" name="form-search">
@@ -115,7 +115,9 @@
 	</table>
 
 	<!-- table pagination -->
-	<c:url var="pagingUrl" value="${queryUrl }">
+	<c:url var="pagingUrl" value="/">
+    <c:param name="category" value="${param.category}" />
+    <c:param name="query" value="${param.query}" />
 		<c:param name="pageSize" value="${param.pageSize}" />
 	</c:url>
 	<div class='float-right'>

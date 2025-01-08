@@ -65,7 +65,7 @@ textarea{
 </div><!-- /.wrapper -->
   
 <%@include file="./includes/footer.jsp" %>
-<script src="/board/resources/js/fileupload.js"></script>
+<script src="<c:url value="/resources/js/fileupload.js" />"></script>
 <script>
 function submitForm() {
   if( ! fileVerified) return false;

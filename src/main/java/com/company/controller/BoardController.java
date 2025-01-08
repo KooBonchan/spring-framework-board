@@ -37,14 +37,6 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	@RequestMapping
-	public String defaultHandler(HttpServletRequest request) {
-		log.info("----Not existing uri: redirecting----");
-		log.info("Request URI: " + request.getRequestURI());
-        log.info("Request Method: " + request.getMethod());
-		return "redirect:/";
-	}
-	
 	@GetMapping("")
 	public String home(Model model,
 		@RequestParam(name = "page", required = false, defaultValue = "1") int page,
