@@ -11,8 +11,7 @@
     <security:logout logout-url="/logout"
       delete-cookies="remember-me,JSESSION_ID"
       logout-success-url="/" />
-    <security:remember-me data-source-ref="dataSource"
-      token-validity-seconds="604800" /> <!-- 7 days -->
+    <security:remember-me data-source-ref="dataSource" token-validity-seconds="604800" /> <!-- 7 days -->
   </security:http>
 
   <bean
